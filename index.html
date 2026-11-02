@@ -13,7 +13,7 @@ body { background-color: var(--ink); color: #dff3ff; font-family: 'Cairo', sans-
 body::before { content: ""; position: fixed; inset: 0; z-index: -2; background-image: radial-gradient(circle at 15% 50%, rgba(177,75,255,.08), transparent 40%), radial-gradient(circle at 85% 30%, rgba(0,229,255,.08), transparent 40%); }
 body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: linear-gradient(rgba(0,229,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,.03) 1px, transparent 1px); background-size: 60px 60px; }
 
-.hero { min-height: 40vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem 1rem; }
+.hero { min-height: 35vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem 1rem; }
 .title { font-family: 'Orbitron'; font-size: clamp(3rem, 10vw, 6rem); font-weight: 900; background: linear-gradient(180deg, #fff, var(--neon), var(--violet)); -webkit-background-clip: text; color: transparent; }
 .subtitle { margin-top: 1rem; letter-spacing: 0.3em; color: #8fd8ef; font-size: 1rem; }
 
@@ -25,12 +25,12 @@ body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-event
 .chip { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--line); background: rgba(255,255,255,0.02); color: #a9d3e4; cursor: pointer; white-space: nowrap; font-family: 'Cairo'; font-size: 0.85rem; }
 .chip.active { background: var(--neon); color: #000; font-weight: bold; border-color: var(--neon); }
 
-.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; padding: 2rem 1.5rem; max-width: 1200px; margin: 0 auto; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; padding: 1.5rem 1rem; max-width: 1200px; margin: 0 auto; }
 .card { background: #080b16; border: 1px solid var(--line); border-radius: 15px; overflow: hidden; cursor: pointer; }
-.card img { width: 100%; height: 320px; object-fit: cover; display: block; background: #111; }
-.card-info { padding: 15px; background: #080b16;}
-.card-title { font-size: 1.1rem; margin-bottom: 5px; font-weight: 700; color:#fff; }
-.card-artist { color: var(--neon); font-size: 0.8rem; }
+.card img { width: 100%; height: 300px; object-fit: cover; display: block; background: #111; }
+.card-info { padding: 12px; background: #080b16;}
+.card-title { font-size: 1rem; margin-bottom: 5px; font-weight: 700; color:#fff; }
+.card-artist { color: var(--neon); font-size: 0.75rem; }
 
 .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 100; }
 .modal.open { display: flex; }
@@ -42,7 +42,7 @@ body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-event
 .modal-desc { line-height: 2; color: #b9d8e8; font-size: 1.05rem; }
 .close-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid var(--neon); border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-size: 20px; z-index: 10;}
 
-#scrollTop { position: fixed; bottom: 25px; left: 25px; width: 50px; height: 50px; border-radius: 50%; background: rgba(4,5,13,0.8); border: 1px solid var(--neon); color: var(--neon); font-size: 24px; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 90; }
+#scrollTop { position: fixed; bottom: 25px; left: 25px; width: 45px; height: 45px; border-radius: 50%; background: rgba(4,5,13,0.8); border: 1px solid var(--neon); color: var(--neon); font-size: 22px; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 90; }
 
 .footer { text-align: center; padding: 2rem; border-top: 1px solid var(--line); color: #6fa9c2; font-size: 0.8rem; font-family: 'Orbitron'; margin-top: 2rem;}
 </style>
@@ -118,82 +118,81 @@ body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-event
     <!-- 1 -->
     <div class="card" data-era="عصر النهضة" data-artist="ليوناردو دافنشي">
         <div class="hidden-desc" style="display:none;">لوحة تتحدى الزمن. الابتسامة الغامضة والطبيعة الخلفية غير المكتملة يخلقان إحساسًا بأن اللوحة حية وتتغير أمام عينيك. دافنشي استخدم تقنية السفوماتو ليصنع ملامح لا تبدو صلبة، لتعبر عن الغموض البشري والتوتر بين الروح والطبيعة.</div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/600px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg" onerror="this.src='https://picsum.photos/400/500'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/600px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg" referrerpolicy="no-referrer" onerror="this.src='https://picsum.photos/400/500'">
         <div class="card-info"><h3 class="card-title">الموناليزا</h3><p class="card-artist">ليوناردو دافنشي · 1503</p></div>
     </div>
     <!-- 2 -->
     <div class="card" data-era="عصر النهضة" data-artist="بوتيتشيلي">
         <div class="hidden-desc" style="display:none;">تخيل الجمال الإلهي وهو يخرج من البحر. اللوحة بتمثل النقاء والطبيعة، ورياح الربيع بتدفع فينوس ناحية الشاطئ. بوتيتشيلي هنا مش بيرسم واقع، هو بيرسم أسطورة شاعرية بتعبر عن الجمال المثالي والروحانية اللي عصر النهضة كان بيدور عليها.</div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/800px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg" onerror="this.src='https://picsum.photos/400/500'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/800px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg" referrerpolicy="no-referrer" onerror="this.src='https://picsum.photos/400/500'">
         <div class="card-info"><h3 class="card-title">ميلاد فينوس</h3><p class="card-artist">بوتيتشيلي · 1485</p></div>
     </div>
     <!-- 3 -->
     <div class="card" data-era="عصر النهضة" data-artist="ليوناردو دافنشي">
         <div class="hidden-desc" style="display:none;">اللوحة مش عن الأكل، هي لحظة الصدمة! المسيح لسه بيقول واحد فيكم هيسلمني، وكل التلاميذ في حالة ذهول وصدمة. دافنشي رتب الـ 12 شخص في 3 مجموعات عشان يحكي قصة الخيانة والوفاء في ثانية واحدة.</div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/The_Last_Supper_-_Leonardo_Da_Vinci_-_High_Resolution_32x16.jpg/800px-The_Last_Supper_-_Leonardo_Da_Vinci_-_High_Resolution_32x16.jpg" onerror="this.src='https://picsum.photos/400/500'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/The_Last_Supper_-_Leonardo_Da_Vinci_-_High_Resolution_32x16.jpg/800px-The_Last_Supper_-_Leonardo_Da_Vinci_-_High_Resolution_32x16.jpg" referrerpolicy="no-referrer" onerror="this.src='https://picsum.photos/400/500'">
         <div class="card-info"><h3 class="card-title">العشاء الأخير</h3><p class="card-artist">ليوناردو دافنشي · 1498</p></div>
     </div>
     <!-- 4 -->
     <div class="card" data-era="عصر النهضة" data-artist="مايكل أنجلو">
         <div class="hidden-desc" style="display:none;">نقطة التلامس بين إصبع الله وإصبع آدم هي سر الحياة. آدم بيبان خامل ومسترخي، ربنا بيبعت له الطاقة. اللوحة بتعبر عن لحظة بداية الحياة، والفجوة الصغيرة بين الإصبعين خلقت توتر خالد بيجذب العين.</div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg/800px-Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg" onerror="this.src='https://picsum.photos/400/500'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg/800px-Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg" referrerpolicy="no-referrer" onerror="this.src='https://picsum.photos/400/500'">
         <div class="card-info"><h3 class="card-title">خلق آدم</h3><p class="card-artist">مايكل أنجلو · 1512</p></div>
     </div>
     <!-- 5 -->
     <div class="card" data-era="عصر النهضة" data-artist="رافائيل">
         <div class="hidden-desc" style="display:none;">حلم عصر النهضة في لوحة واحدة. كل فلاسفة وعلماء اليونان اتجمعوا في قاعة واحدة (أفلاطون وأرسطو في النص). رافائيل هنا بيحتفل بالعقل البشري والبحث عن الحقيقة، وكأنه بيقول إن العلم والفكر بيتكملوا مع بعض.</div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg/800px-%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg" onerror="this.src='https://picsum.photos/400/500'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg/800px-%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg" referrerpolicy="no-referrer" onerror="this.src='https://picsum.photos/400/500'">
         <div class="card-info"><h3 class="card-title">مدرسة أثينا</h3><p class="card-artist">رافائيل · 1511</p></div>
     </div>
     <!-- 6 -->
     <div class="card" data-era="عصر النهضة" data-artist="هيرونيموس بوش">
         <div class="hidden-desc" style="display:none;">رحلة سريالية بين الجنة (يسار)، الملذات (وسط)، والجحيم (يمين). اللوحة مليانة تفاصيل غريبة وكائنات خرافية. بوش كان بيحذر البشر من الانغماس في الشهوات، واللوحة بتبان كأنها كابوس مرئي عن مصير الإنسان.</div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg/800px-The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg" onerror="this.src='https://picsum.photos/400/500'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg/800px-The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg" referrerpolicy="no-referrer" onerror="this.src='https://picsum.photos/400/500'">
         <div class="card-info"><h3 class="card-title">حديقة الملذات الأرضية</h3><p class="card-artist">هيرونيموس بوش · 1510</p></div>
     </div>
     <!-- 7 -->
     <div class="card" data-era="عصر النهضة" data-artist="بيتر بروغل">
         <div class="hidden-desc" style="display:none;">البرج بيرمز للغرور البشري. البشر بيحاولوا يبنوا حاجة توصل للسما بجهدهم، لكن البناء مهزوز ومش مكتمل. اللوحة بتعبر عن فشل الطموح البشري لما بيبقى بعيد عن الحكمة، وبتشبه المدن الحديثة المزدحمة اللي بتدور على المستحيل.</div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Pieter_Bruegel_the_Elder_-_The_Tower_of_Babel_%28Vienna%29_-_Google_Art_Project_-_edited.jpg/800px-Pieter_Bruegel_the_Elder_-_The_Tower_of_Babel_%28Vienna%29_-_Google_Art_Project_-_edited.jpg" onerror="this.src='https://picsum.photos/400/500'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Pieter_Bruegel_the_Elder_-_The_Tower_of_Babel_%28Vienna%29_-_Google_Art_Project_-_edited.jpg/800px-Pieter_Bruegel_the_Elder_-_The_Tower_of_Babel_%28Vienna%29_-_Google_Art_Project_-_edited.jpg" referrerpolicy="no-referrer" onerror="this.src='https://picsum.photos/400/500'">
         <div class="card-info"><h3 class="card-title">برج بابل</h3><p class="card-artist">بيتر بروغل · 1563</p></div>
     </div>
     <!-- 8 -->
     <div class="card" data-era="الباروك" data-artist="رامبرانت">
         <div class="hidden-desc" style="display:none;">رامبرانت كسر قاعدة رسم الشخصيات، ورسم الحركة. الضوء واقع على القبطان ومساعده، والباقي في ظل. اللوحة بتحسسك إن فيه حدث لسه بيحصل، مش مجرد صورة. بتعبر عن الانتماء والحركة في ظل ظلام دامس.</div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/The_Night_Watch_-_HD.jpg/800px-The_Night_Watch_-_HD.jpg" onerror="this.src='https://picsum.photos/400/500'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/The_Night_Watch_-_HD.jpg/800px-The_Night_Watch_-_HD.jpg" referrerpolicy="no-referrer" onerror="this.src='https://picsum.photos/400/500'">
         <div class="card-info"><h3 class="card-title">الدورية الليلية</h3><p class="card-artist">رامبرانت · 1642</p></div>
     </div>
     <!-- 9 -->
     <div class="card" data-era="الباروك" data-artist="دييغو فيلاسكيز">
         <div class="hidden-desc" style="display:none;">اللوحة دي عبارة عن ألغاز! الرسام راسم نفسه وهو بيرسم، والطفلة (الملكة الصغيرة) بتتفرج. الملك والملكة بيبانوا في المرايا في الخلف. اللوحة بتسأل: مين اللي بيتم رسمه؟ مين اللي بيراقب؟ بتعبر عن تعقيد الواقع وفكرة الصورة داخل الصورة.</div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Las_Meninas_01.jpg/800px-Las_Meninas_01.jpg" onerror="this.src='https://picsum.photos/400/500'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Las_Meninas_01.jpg/800px-Las_Meninas_01.jpg" referrerpolicy="no-referrer" onerror="this.src='https://picsum.photos/400/500'">
         <div class="card-info"><h3 class="card-title">وصيفات الشرف</h3><p class="card-artist">دييغو فيلاسكيز · 1656</p></div>
     </div>
     <!-- 10 -->
     <div class="card" data-era="الباروك" data-artist="يوهانس فيرمير">
         <div class="hidden-desc" style="display:none;">بيسموها موناليزا الشمال. فيرمير ركز على الضوء اللي واقع على وشها والقرط. اللحظة اللي هي بتلف فيها لورا وتفرج علينا بحياء وسرية. بتعبر عن البساطة، الجمال الهادي، والغموض اللي في نظرة العين.</div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Meisje_met_de_parel.jpg/600px-Meisje_met_de_parel.jpg" onerror="this.src='https://picsum.photos/400/500'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Meisje_met_de_parel.jpg/600px-Meisje_met_de_parel.jpg" referrerpolicy="no-referrer" onerror="this.src='https://picsum.photos/400/500'">
         <div class="card-info"><h3 class="card-title">الفتاة ذات القرط اللؤلؤي</h3><p class="card-artist">يوهانس فيرمير · 1665</p></div>
     </div>
     <!-- 11 -->
     <div class="card" data-era="الرومانسية" data-artist="أوجين ديلاكروا">
         <div class="hidden-desc" style="display:none;">الست اللي في النص هي رمز الحرية، بتقود الشعب فوق الجثث والدمار. اللوحة بتحكي عن ثورة 1830 في فرنسا. بتعبر عن التضحية، الشجاعة، والأمل في بكرة أحسن مهما كان الحاضر صعب.</div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Eug%C3%A8ne_Delacroix_-_Le_28_Juillet._La_Libert%C3%A9_guidant_le_peuple.jpg/800px-Eug%C3%A8ne_Delacroix_-_Le_28_Juillet._La_Libert%C3%A9_guidant_le_peuple.jpg" onerror="this.src='https://picsum.photos/400/500'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Eug%C3%A8ne_Delacroix_-_Le_28_Juillet._La_Libert%C3%A9_guidant_le_peuple.jpg/800px-Eug%C3%A8ne_Delacroix_-_Le_28_Juillet._La_Libert%C3%A9_guidant_le_peuple.jpg" referrerpolicy="no-referrer" onerror="this.src='https://picsum.photos/400/500'">
         <div class="card-info"><h3 class="card-title">الحرية تقود الشعب</h3><p class="card-artist">أوجين ديلاكروا · 1830</p></div>
     </div>
     <!-- 12 -->
     <div class="card" data-era="الرومانسية" data-artist="تيودور جيريكو">
         <div class="hidden-desc" style="display:none;">قصة حقيقية لسفينة غرقت والتخلي عن الركاب. اللوحة بترسم لحظة الصراع بين الأمل (بيحاولوا يلوحوا لسفينة إنقاذ) واليأس والموت. بتعبر عن هشاشة الإنسان وقسوة الطبيعة، وبتعكس فساد المسؤولين اللي سابوا الشعب يموت.</div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/JEAN_LOUIS_TH%C3%89ODORE_G%C3%89RICAULT_-_La_Balsa_de_la_Medusa_%28Museo_del_Louvre%2C_1818-19%29.jpg/800px-JEAN_LOUIS_TH%C3%89ODORE_G%C3%89RICAULT_-_La_Balsa_de_la_Medusa_%28Museo_del_Louvre%2C_1818-19%29.jpg" onerror="this.src='https://picsum.photos/400/500'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/JEAN_LOUIS_TH%C3%89ODORE_G%C3%89RICAULT_-_La_Balsa_de_la_Medusa_%28Museo_del_Louvre%2C_1818-19%29.jpg/800px-JEAN_LOUIS_TH%C3%89ODORE_G%C3%89RICAULT_-_La_Balsa_de_la_Medusa_%28Museo_del_Louvre%2C_1818-19%29.jpg" referrerpolicy="no-referrer" onerror="this.src='https://picsum.photos/400/500'">
         <div class="card-info"><h3 class="card-title">طوف الميدوزا</h3><p class="card-artist">تيودور جيريكو · 1819</p></div>
     </div>
     <!-- 13 -->
     <div class="card" data-era="الرومانسية" data-artist="كاسبار ديفيد فريدريش">
         <div class="hidden-desc" style="display:none;">راجل واقف لوحده بيتأمل في بحر من الضباب. اللوحة مش عن الشخص، دي عن الإحساس. بتعبر عن عظمة الطبيعة أمام ضعف الإنسان، والتأمل، والوحدة. من أشهر لوحات الرومانسية اللي بتحسسك بالفناء وأنت بتتفرج.</div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpeg/600px-Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpeg" onerror="this.src='https://picsum.photos/400/500'">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpeg/600px-Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpeg" referrerpolicy="no-referrer" onerror="this.src='https://picsum.photos/400/500'">
         <div class="card-info"><h3 class="card-title">المتجول فوق بحر الضباب</h3><p class="card-artist">كاسبار ديفيد فريدريش · 1818</p></div>
     </div>
     <!-- 14 -->
     <div class="card" data-era="الرومانسية" data-artist="فرانسيسكو جويا">
-        <div class="hidden-desc" style="display:none;">جويا هنا بيرسم جرح في التاريخ. الجيش الفرنسي بيعمل إعدامات لمدنيين إسبان. الراجل اللي لابس أبيض ورافع إيديه، والدم اللي على الأرض. بتعبر عن فظاعة الحرب ووجهها القبيح، ومفيش مجد هنا، فيه موت بس.</div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/El_tres_de_mayo_de_1808_en_Madrid%2C_por_Francisco_de_Goya_%28Museo_del_Prado%29.jpg/800px-El_tres_de_ma
+        <div class="hidden-desc" style="display:none;">جويا
