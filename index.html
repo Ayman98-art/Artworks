@@ -1,1 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>مِرآة | أرشيف اللوحات</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+</head>
+<body>
 
+    <div class="hero">
+        <h1 class="title">مِرآة</h1>
+        <p class="subtitle">أرشيف اللوحات · خارج الزمن</p>
+    </div>
+
+    <div class="filters">
+        <div class="filter-group">
+            <span class="filter-label">العصر</span>
+            <div class="filter-row" id="eraFilters">
+                <button class="chip active" onclick="filterCards('era', 'all', this)">الكل</button>
+                <button class="chip" onclick="filterCards('era', 'عصر النهضة', this)">عصر النهضة</button>
+                <button class="chip" onclick="filterCards('era', 'الباروك', this)">الباروك</button>
+                <button class="chip" onclick="filterCards('era', 'الرومانسية', this)">الرومانسية</button>
+                <button class="chip" onclick="filterCards('era', 'أوكييو-إي', this)">أوكييو-إي</button>
+                <button class="chip" onclick="filterCards('era', 'ما قبل رافائيل', this)">ما قبل رافائيل</button>
+                <button class="chip" onclick="filterCards('era', 'الواقعية', this)">الواقعية</button>
+                <button class="chip" onclick="filterCards('era', 'الانطباعية', this)">الانطباعية</button>
+                <button class="chip" onclick="filterCards('era', 'التنقيطية', this)">التنقيطية</button>
+                <button class="chip" onclick="filterCards('era', 'ما بعد الانطباعية', this)">ما بعد الانطباعية</button>
+                <button class="chip" onclick="filterCards('era', 'التعبيرية', this)">التعبيرية</button>
+                <button class="chip" onclick="filterCards('era', 'الفن الجديد', this)">الفن الجديد</button>
+                <button class="chip" onclick="filterCards('era', 'السريالية', this)">السريالية</button>
+                <button class="chip" onclick="filterCards('era', 'التكعيبية', this)">التكعيبية</button>
+                <button class="chip" onclick="filterCards('era', 'الواقعية الأمريكية', this)">الواقعية الأمريكية</button>
+                <button class="chip" onclick="filterCards('era', 'بوب آرت', this)">بوب آرت</button>
+            </div>
+        </div>
+        <div class="filter-group">
+            <span class="filter-label">الفنان</span>
+            <div class="filter-row" id="artistFilters">
+                <button class="chip active" onclick="filterCards('artist', 'all', this)">الكل</button>
+                <button class="chip" onclick="filterCards('artist', 'ليوناردو دافنشي', this)">ليوناردو دافنشي</button>
+                <button class="chip" onclick="filterCards('artist', 'بوتيتشيلي', this)">بوتيتشيلي</button>
+                <button class="chip" onclick="filterCards('artist', 'مايكل أنجلو', this)">مايكل أنجلو</button>
+                <button class="chip" onclick="filterCards('artist', 'رافائيل', this)">رافائيل</button>
+                <button class="chip" onclick="filterCards('artist', 'هيرونيموس بوش', this)">هيرونيموس بوش</button>
+                <button class="chip" onclick="filterCards('artist', 'بيتر بروغل', this)">بيتر بروغل</button>
+                <button class="chip" onclick="filterCards('artist', 'رامبرانت', this)">رامبرانت</button>
+                <button class="chip" onclick="filterCards('artist', 'دييغو فيلاسكيز', this)">دييغو فيلاسكيز</button>
+                <button class="chip" onclick="filterCards('artist', 'يوهانس فيرمير', this)">يوهانس فيرمير</button>
+                <button class="chip" onclick="filterCards('artist', 'أوجين ديلاكروا', this)">أوجين ديلاكروا</button>
+                <button class="chip" onclick="filterCards('artist', 'تيودور جيريكو', this)">تيودور جيريكو</button>
+                <button class="chip" onclick="filterCards('artist', 'كاسبار ديفيد فريدريش', this)">كاسبار ديفيد فريدريش</button>
+                <button class="chip" onclick="filterCards('artist', 'فرانسيسكو جويا', this)">فرانسيسكو جويا</button>
+                <button class="chip" onclick="filterCards('artist', 'هوكوساي', this)">هوكوساي</button>
+                <button class="chip" onclick="filterCards('artist', 'جون إيفريت ميليه', this)">جون إيفريت ميليه</button>
+                <button class="chip" onclick="filterCards('artist', 'جيمس ويستلر', this)">جيمس ويستلر</button>
+                <button class="chip" onclick="filterCards('artist', 'كلود مونيه', this)">كلود مونيه</button>
+                <button class="chip" onclick="filterCards('artist', 'إدغار ديجا', this)">إدغار ديجا</button>
+                <button class="chip" onclick="filterCards('artist', 'بيير أوغوست رينوار', this)">بيير أوغوست رينوار</button>
+                <button class="chip" onclick="filterCards('artist', 'جورج سورا', this)">جورج سورا</button>
+                <button class="chip" onclick="filterCards('artist', 'فان جوخ', this)">فان جوخ</button>
+                <button class="chip" onclick="filterCards('artist', 'إدفارد مونك', this)">إدفارد مونك</button>
+                <button class="chip" onclick="filterCards('artist', 'جوستاف كليمت', this)">جوستاف كليمت</button>
+                <button class="chip" onclick="filterCards('artist', 'سلفادور دالي', this)">سلفادور دالي</button>
+                <button class="chip" onclick="filterCards('artist', 'بابلو بيكاسو', this)">بابلو بيكاسو</button>
+                <button class="chip" onclick="filterCards('artist', 'فريدا كاهلو', this)">فريدا كاهلو</button>
+                <button class="chip" onclick="filterCards('artist', 'إدوارد هوبر', this)">إدوارد هوبر</button>
+                <button class="chip" onclick="filterCards('artist', 'جرانت وود', this)">جرانت وود</button>
+                <button class="chip" onclick="filterCards('artist', 'رينيه ماغريت', this)">رينيه ماغريت</button>
+                <button class="chip" onclick="filterCards('artist', 'آندي وارهول', this)">آندي وارهول</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="counter" id="counter">جاري التحميل...</div>
+
+    <!-- الفلاتر هتترسم هنا بالجافاسكريبت -->
+    <div class="gallery" id="gallery"></div>
+
+    <button id="scrollTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <div id="modal" class="modal" onclick="if(event.target.id === 'modal') closeModal()">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <img id="mImg" src="" alt="">
+            <div class="modal-text">
+                <h2 id="mTitle" class="modal-title"></h2>
+                <p id="mArtist" class="modal-artist"></p>
+                <p id="mDesc" class="modal-desc"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">MIRROR · ARCHIVE v7.0</div>
+
+    <script src="app.js"></script>
+</body>
+</html>
