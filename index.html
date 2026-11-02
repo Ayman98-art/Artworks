@@ -12,13 +12,13 @@ body { background-color: var(--ink); color: #dff3ff; font-family: 'Cairo', sans-
 
 /* خلفية خفيفة جداً عشان متتقلش الموقع */
 body::before { content: ""; position: fixed; inset: 0; z-index: -2; background-image: radial-gradient(circle at 15% 50%, rgba(177,75,255,.08), transparent 40%), radial-gradient(circle at 85% 30%, rgba(0,229,255,.08), transparent 40%); }
-body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: linear-gradient(rgba(0,229,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,.03) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(circle at center, black, transparent 80%); -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%); }
+body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: linear-gradient(rgba(0,229,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,.03) 1px, transparent 1px); background-size: 60px 60px; }
 
 .hero { min-height: 50vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem 1rem; }
 .title { font-family: 'Orbitron'; font-size: clamp(3rem, 10vw, 6rem); font-weight: 900; background: linear-gradient(180deg, #fff, var(--neon), var(--violet)); -webkit-background-clip: text; color: transparent; }
 .subtitle { margin-top: 1rem; letter-spacing: 0.3em; color: #8fd8ef; font-size: 1rem; }
 
-.filters { position: sticky; top: 0; background: rgba(4,5,13,0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 1rem; border-bottom: 1px solid var(--line); z-index: 50; }
+.filters { position: sticky; top: 0; background: rgba(4,5,13,0.95); backdrop-filter: blur(15px); padding: 1rem; border-bottom: 1px solid var(--line); z-index: 50; }
 .filter-group { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
 .filter-label { color: var(--neon); font-size: 0.85rem; font-family: 'Orbitron'; min-width: 50px;}
 .filter-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
@@ -46,8 +46,7 @@ body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-event
 .close-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid var(--neon); border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-size: 20px; z-index: 10;}
 .close-btn:hover { background: var(--neon); color: #000; }
 
-#scrollTop { position: fixed; bottom: 25px; left: 25px; width: 50px; height: 50px; border-radius: 50%; background: rgba(4,5,13,0.8); border: 1px solid var(--neon); color: var(--neon); font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 90; }
-#scrollTop.show { opacity: 1; visibility: visible; }
+#scrollTop { position: fixed; bottom: 25px; left: 25px; width: 50px; height: 50px; border-radius: 50%; background: rgba(4,5,13,0.8); border: 1px solid var(--neon); color: var(--neon); font-size: 24px; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 90; }
 #scrollTop:hover { background: var(--neon); color: #000; }
 
 .footer { text-align: center; padding: 2rem; border-top: 1px solid var(--line); color: #6fa9c2; font-size: 0.8rem; font-family: 'Orbitron'; margin-top: 2rem;}
@@ -87,17 +86,13 @@ body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-event
     </div>
 </div>
 
-<div class="footer">MIRROR · ARCHIVE v3.3</div>
+<div class="footer">MIRROR · ARCHIVE v4.0</div>
 
 <script>
-// رسالة خطأ عشان لو حصلت مشكلة نعرفها
-window.onerror = function(msg) {
-    document.getElementById('gallery').innerHTML = '<div style="color:#ff4d4d; text-align:center; width:100%; grid-column:1/-1; padding:20px; border:1px solid red; background:rgba(255,0,0,0.1);">حدث خطأ في التحميل: ' + msg + '</div>';
-};
-
+// أبسط كود جافاسكريبت ممكن عشان يشتغل على أي متصفح
 document.addEventListener("DOMContentLoaded", function() {
     
-    const arts = [
+    var arts = [
       { title:"الموناليزا", artist:"ليوناردو دافنشي", year:1503, era:"عصر النهضة", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/600px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg", desc:"لوحة تتحدى الزمن. الابتسامة الغامضة والطبيعة الخلفية غير المكتملة يخلقان إحساسًا بأن اللوحة حية وتتغير أمام عينيك. دافنشي استخدم تقنية 'السفوماتو' (تخفيف الحدود) ليصنع ملامح لا تبدو صلبة، لتعبر عن الغموض البشري والتوتر بين الروح والطبيعة." },
       { title:"ميلاد فينوس", artist:"بوتيتشيلي", year:1485, era:"عصر النهضة", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/800px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg", desc:"تخيل الجمال الإلهي وهو يخرج من البحر. اللوحة بتمثل النقاء والطبيعة، ورياح الربيع بتدفع فينوس ناحية الشاطئ. بوتيتشيلي هنا مش بيرسم واقع، هو بيرسم أسطورة شاعرية بتعبر عن الجمال المثالي والروحانية اللي عصر النهضة كان بيدور عليها." },
       { title:"العشاء الأخير", artist:"ليوناردو دافنشي", year:1498, era:"عصر النهضة", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/The_Last_Supper_-_Leonardo_Da_Vinci_-_High_Resolution_32x16.jpg/800px-The_Last_Supper_-_Leonardo_Da_Vinci_-_High_Resolution_32x16.jpg", desc:"اللوحة مش عن الأكل، هي لحظة الصدمة! المسيح لسه بيقول 'واحد فيكم هيسلمني'، وكل التلاميذ في حالة ذهول وصدمة. دافنشي رتب الـ 12 شخص في 3 مجموعات عشان يحكي قصة الخيانة والوفاء في ثانية واحدة." },
@@ -125,4 +120,6 @@ document.addEventListener("DOMContentLoaded", function() {
       { title:"القُبلة", artist:"جوستاف كليمت", year:1908, era:"الفن الجديد", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/The_Kiss_-_Gustav_Klimt_-_Google_Art_Project.jpg/800px-The_Kiss_-_Gustav_Klimt_-_Google_Art_Project.jpg", desc:"راجل وست بيدوبوا في بعض وسط أشكال ذهبية مزركشة. الست بتستسلم للحظة، والراجل محاوطها. اللوحة بتعبر عن الحب كحالة من الاندماج الكامل، الأمان، والانفصال عن العالم. الذهب هنا بيرمز للروحانية والقدسية." },
       { title:"ثبات الذاكرة", artist:"سلفادور دالي", year:1931, era:"السريالية", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/The_Persistence_of_Memory.jpg/800px-The_Persistence_of_Memory.jpg", desc:"ساعات بتدوب وتسيح على الشجر والطاولة. دالي هنا بيهاجم فكرة 'الزمن الثابت'. بتعبر عن إن الوقت مش حاجة صلبة، هو إحساس. في الأحلام، والذكريات، الزمن بيمتد وبيتغير. اللوحة بتسأل: إيه هو الوقت الحقيقي؟" },
       { title:"غيرنيكا", artist:"بابلو بيكاسو", year:1937, era:"التكعيبية", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/PicassoGuernica.jpg/800px-PicassoGuernica.jpg", desc:"رد فعل على قصف مدينة غيرنيكا في إسبانيا. الوجوه مقطعة، الأجساد مشوهة، الثور بيصرخ، الأم شايلة ولدها الميت. مفيش ألوان، أبيض وأسود بس (زي الجرايد). بتعبر عن فظاعة الحرب، العذاب، وكيف إن المدنيين هما اللي بيدفعوا التمن." },
-      { title:"الفريدتان", artist:"فريدا كاهلو", year:1939, era:"السريالية", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Frida_Kahlo_%28self_portrait%2C_The_Two_Fridas%29.jpg/600px-Frida_Kahlo_%28self_portrait%2C_The_Two_Fridas%29.jpg", desc:"فريدا بترسم نفسها مرتين: واحدة بلبس أوروبي وواحدة بلبس مكسيكي. القلبين مكشوفين ومربوطين بشرايين. اللوحة بتعبر عن الانقسام الداخلي، الهوية، والألم الجسدي والنفسي اللي كانت بتعا
+      { title:"الفريدتان", artist:"فريدا كاهلو", year:1939, era:"السريالية", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Frida_Kahlo_%28self_portrait%2C_The_Two_Fridas%29.jpg/600px-Frida_Kahlo_%28self_portrait%2C_The_Two_Fridas%29.jpg", desc:"فريدا بترسم نفسها مرتين: واحدة بلبس أوروبي وواحدة بلبس مكسيكي. القلبين مكشوفين ومربوطين بشرايين. اللوحة بتعبر عن الانقسام الداخلي، الهوية، والألم الجسدي والنفسي اللي كانت بتعاني منه بعد حادثة وحياتها مع دييجو ريفيرا." },
+      { title:"صقور الليل", artist:"إدوارد هوبر", year:1942, era:"الواقعية الأمريكية", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Nighthawks_by_Edward_Hopper_1942.jpg/800px-Nighthawks_by_Edward_Hopper_1942.jpg", desc:"4 أشخاص في كافيتريا مضيئة وسط مدينة فاضية في الليل. كلهن قاعدين قريبين من بعض، بس مفيش كلام ولا تواصل. اللوحة بتعبر عن العزلة، الوحدة، والاغتراب في المدينة الحديثة (خصوصاً في زمن الحرب العالمية التانية)." },
+      { title:"قوطية أمريكية", artist:"جرانت وود", year:1930, e
