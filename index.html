@@ -1,356 +1,219 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>مِرآة | أرشيف اللوحات</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400;600;700;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
-:root{
-  --neon:#00e5ff; --violet:#b14bff; --pink:#ff2d95; --gold:#ffd166;
-  --ink:#04050d; --ink-2:#080b16;
-  --line:rgba(0,229,255,.16);
+:root {
+    --neon:#00e5ff; --violet:#b14bff; --ink:#04050d;
+    --line:rgba(0,229,255,.16);
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--ink);color:#dff3ff;font-family:'Cairo',sans-serif;overflow-x:hidden;min-height:100vh}
-::selection{background:var(--neon);color:#04050d}
-img{user-select:none;-webkit-user-drag:none}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--ink); color: #dff3ff; font-family: 'Cairo', sans-serif; overflow-x: hidden; }
 
-/* ============ طبقات الخلفية ============ */
-#stars,.nebula,.grid,.scanlines,.vignette{position:fixed;inset:0;pointer-events:none;z-index:0}
-.nebula{background:
-  radial-gradient(circle at 18% 22%,rgba(177,75,255,.16),transparent 42%),
-  radial-gradient(circle at 82% 68%,rgba(0,229,255,.13),transparent 45%),
-  radial-gradient(circle at 50% 105%,rgba(255,45,149,.10),transparent 52%);
-  animation:drift 20s ease-in-out infinite alternate}
-@keyframes drift{to{transform:scale(1.15) translateY(-20px)}}
-.grid{background-image:
-  linear-gradient(rgba(0,229,255,.045) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(0,229,255,.045) 1px,transparent 1px);
-  background-size:72px 72px;
-  -webkit-mask-image:radial-gradient(circle at 50% 40%,#000 10%,transparent 75%);
-          mask-image:radial-gradient(circle at 50% 40%,#000 10%,transparent 75%)}
-.scanlines{z-index:3;
-  background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0px,rgba(0,0,0,.035) 1px,transparent 1px,transparent 3px);
-  opacity:.6}
-.vignette{z-index:4;
-  background:radial-gradient(ellipse at center,transparent 42%,rgba(0,0,0,.45) 100%)}
+/* شاشة البداية */
+.hero { min-height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
+.title { font-family: 'Orbitron'; font-size: clamp(3rem, 10vw, 7rem); font-weight: 900; background: linear-gradient(180deg, #fff, var(--neon), var(--violet)); -webkit-background-clip: text; color: transparent; }
+.subtitle { margin-top: 1.5rem; letter-spacing: 0.3em; color: #8fd8ef; font-size: 1rem; }
 
-.cursor-glow{position:fixed;top:0;left:0;width:420px;height:420px;border-radius:50%;
-  background:radial-gradient(circle,rgba(0,229,255,.09),transparent 70%);
-  pointer-events:none;z-index:5;mix-blend-mode:screen;
-  transform:translate(-50%,-50%);transition:opacity .4s;will-change:transform}
-@media (hover:none){.cursor-glow{display:none}}
+/* الفلاتر */
+.filters { position: sticky; top: 0; background: rgba(4,5,13,0.95); backdrop-filter: blur(10px); padding: 1rem; border-bottom: 1px solid var(--line); z-index: 10; }
+.filter-group { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+.filter-label { color: var(--neon); font-size: 0.85rem; font-family: 'Orbitron'; min-width: 50px;}
+.filter-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+.filter-row::-webkit-scrollbar { display: none; }
+.chip { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--line); background: transparent; color: #a9d3e4; cursor: pointer; white-space: nowrap; font-family: 'Cairo'; font-size: 0.85rem; transition: 0.2s; }
+.chip:hover { border-color: var(--neon); color: #fff; }
+.chip.active { background: var(--neon); color: #000; font-weight: bold; border-color: var(--neon); box-shadow: 0 0 15px rgba(0,229,255,0.4); }
 
-.scroll-progress{position:fixed;top:0;left:0;height:2px;width:0;
-  background:linear-gradient(90deg,var(--neon),var(--violet),var(--pink));
-  z-index:200;box-shadow:0 0 12px var(--neon);transition:width .1s linear}
+/* المعرض */
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; padding: 2rem 1.5rem; max-width: 1200px; margin: 0 auto; }
+.card { background: #080b16; border: 1px solid var(--line); border-radius: 15px; overflow: hidden; cursor: pointer; transition: 0.3s; }
+.card:hover { border-color: var(--neon); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.card img { width: 100%; height: 320px; object-fit: cover; display: block; }
+.card-info { padding: 15px; }
+.card-title { font-size: 1.1rem; margin-bottom: 5px; font-weight: 700; }
+.card-artist { color: var(--neon); font-size: 0.8rem; }
 
-/* ============ شاشة الإقلاع (تختفي أوتوماتيك بـ CSS) ============ */
-#boot{position:fixed;inset:0;z-index:999;background:var(--ink);
-  display:grid;place-items:center;
-  animation: hideBoot 0.8s ease-in-out 2.5s forwards;}
-@keyframes hideBoot{
-  0%{opacity:1;visibility:visible}
-  99%{opacity:0;visibility:visible}
-  100%{opacity:0;visibility:hidden;pointer-events:none}
-}
-.boot-inner{display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center}
-.boot-title{font-family:'Orbitron';font-size:2.4rem;font-weight:900;letter-spacing:.08em;
-  background:linear-gradient(180deg,#fff,var(--neon) 60%,var(--violet));
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 0 20px rgba(0,229,255,.5))}
-.boot-bar{width:220px;height:2px;background:rgba(0,229,255,.15);margin:1.2rem 0 .8rem;overflow:hidden;border-radius:2px}
-.boot-bar span{display:block;height:100%;width:0;border-radius:2px;
-  background:linear-gradient(90deg,var(--neon),var(--violet));animation:load 1.8s ease-out forwards}
-@keyframes load{to{width:100%}}
-.boot-sub{font-family:'Orbitron';font-size:.65rem;letter-spacing:.35em;color:var(--neon);opacity:.65}
+/* المودال (النافذة المنبثقة) */
+.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 100; backdrop-filter: blur(5px); }
+.modal.open { display: flex; }
+.modal-content { background: #0a0f1e; border: 1px solid var(--neon); border-radius: 15px; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 0 50px rgba(0,229,255,0.2); }
+.modal-content img { width: 100%; max-height: 50vh; object-fit: contain; background: #000; }
+.modal-text { padding: 25px; }
+.close-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid var(--neon); border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+.close-btn:hover { background: var(--neon); color: #000; }
 
-/* ============ الـ HERO ============ */
-.hero{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;text-align:center;padding:2rem;overflow:hidden}
-.hero-inner{position:relative;display:flex;flex-direction:column;align-items:center;
-  transition:transform .3s cubic-bezier(.2,.8,.2,1);will-change:transform}
-
-.title-wrap{position:relative;padding:1.8rem 3.4rem}
-.title-wrap::before,.title-wrap::after{content:'';position:absolute;width:26px;height:26px;
-  border:1.5px solid var(--neon);opacity:.55;transition:opacity .4s}
-.title-wrap::before{top:0;left:0;border-right:none;border-bottom:none}
-.title-wrap::after{bottom:0;right:0;border-left:none;border-top:none}
-.title-wrap:hover::before,.title-wrap:hover::after{opacity:1}
-
-.title{position:relative;font-family:'Orbitron';font-size:clamp(3rem,10vw,8rem);font-weight:900;
-  letter-spacing:.04em;line-height:1;
-  background:linear-gradient(180deg,#fff 0%,var(--neon) 45%,var(--violet) 100%);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 0 30px rgba(0,229,255,.5));animation:pulse 5s ease-in-out infinite}
-@keyframes pulse{50%{filter:drop-shadow(0 0 55px rgba(177,75,255,.8))}}
-
-.title-reflection{position:absolute;top:100%;left:0;right:0;padding:1.8rem 3.4rem;margin-top:-1.8rem;
-  font-family:'Orbitron';font-size:clamp(3rem,10vw,8rem);font-weight:900;letter-spacing:.04em;line-height:1;
-  background:linear-gradient(0deg,#fff 0%,var(--neon) 45%,var(--violet) 100%);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  transform:scaleY(-1) translateY(0.1em);opacity:.22;filter:blur(1.5px);
-  -webkit-mask-image:linear-gradient(0deg,#000,transparent 65%);
-          mask-image:linear-gradient(0deg,#000,transparent 65%);
-  pointer-events:none;text-align:center}
-
-.hero-sub{margin-top:3.2rem;font-size:clamp(.85rem,2vw,1.05rem);font-weight:200;
-  letter-spacing:.42em;color:#8fd8ef;text-transform:uppercase;opacity:.85}
-.hero-status{margin-top:2.4rem;display:flex;align-items:center;gap:.55rem;
-  font-family:'Orbitron';font-size:.68rem;letter-spacing:.28em;color:#6fa9c2}
-.hero-status .dot{width:7px;height:7px;border-radius:50%;background:var(--neon);
-  box-shadow:0 0 12px var(--neon);animation:blink 1.6s ease-in-out infinite}
-@keyframes blink{50%{opacity:.25}}
-.hero-line{width:1px;height:70px;margin-top:2.2rem;
-  background:linear-gradient(var(--neon),transparent);animation:drop 2.4s ease-in-out infinite}
-@keyframes drop{50%{opacity:.2;transform:scaleY(.55)}}
-
-/* ============ الفلاتر ============ */
-.filters{position:sticky;top:0;z-index:20;padding:1rem 1.5rem 1.2rem;
-  background:rgba(4,5,13,.78);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--line)}
-.filters .inner{max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:.85rem}
-
-.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-.section-tag{font-family:'Orbitron';font-size:.66rem;letter-spacing:.3em;color:var(--neon);opacity:.75}
-.section-head h2{font-size:1.15rem;font-weight:600;letter-spacing:.02em}
-
-.row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
-.row .lbl{font-size:.7rem;letter-spacing:.26em;color:#6fa9c2;min-width:62px;font-family:'Orbitron'}
-.chip{font-family:'Cairo';font-size:.8rem;padding:.42rem 1rem;border-radius:100px;cursor:pointer;
-  color:#a9d3e4;background:rgba(255,255,255,.035);border:1px solid rgba(0,229,255,.18);
-  transition:all .28s cubic-bezier(.2,.8,.2,1);white-space:nowrap}
-.chip:hover{border-color:rgba(0,229,255,.55);color:#fff;transform:translateY(-1px)}
-.chip.on{background:linear-gradient(135deg,var(--neon),var(--violet));color:#04050d;
-  font-weight:700;border-color:transparent;box-shadow:0 0 22px rgba(0,229,255,.45)}
-.artist-row{max-height:2.6rem;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
-.artist-row::-webkit-scrollbar{display:none}
-.chip.sm{font-size:.74rem;padding:.34rem .85rem}
-.count{font-size:.72rem;color:#6fa9c2;letter-spacing:.14em;font-family:'Orbitron'}
-
-/* ============ المعرض ============ */
-.gallery{position:relative;z-index:2;display:grid;gap:1.8rem;
-  grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
-  max-width:1320px;margin:0 auto;padding:2.8rem 2rem 8rem}
-
-.card{position:relative;border-radius:18px;overflow:hidden;cursor:pointer;
-  background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.01));
-  border:1px solid var(--line);
-  opacity:0;translate:0 40px;
-  transition:opacity .6s,translate .6s,box-shadow .5s,border-color .5s}
-.card.in{opacity:1;translate:0 0}
-.card:hover{border-color:rgba(0,229,255,.7);
-  box-shadow:0 0 40px rgba(0,229,255,.28),0 0 90px rgba(177,75,255,.18)}
-.card::before{content:'';position:absolute;inset:0;z-index:5;pointer-events:none;border-radius:inherit;
-  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(0,229,255,.16),transparent 45%);
-  opacity:0;transition:opacity .3s}
-.card:hover::before{opacity:1}
-
-.thumb{position:relative;aspect-ratio:4/5;overflow:hidden;
-  background:linear-gradient(135deg,#1a2340,#2a1a40 50%,#0a0f1e)}
-.card img{width:100%;height:100%;object-fit:cover;display:block;
-  transition:transform .9s cubic-bezier(.2,.8,.2,1),filter .6s;
-  filter:saturate(.78) contrast(1.08) brightness(.88)}
-.card:hover img{transform:scale(1.08);filter:saturate(1.15) contrast(1.12) brightness(1)}
-.thumb::after{content:'';position:absolute;inset:0;z-index:1;
-  background:linear-gradient(180deg,transparent 40%,rgba(4,5,13,.94))}
-.card .num{position:absolute;top:14px;left:16px;z-index:3;font-family:'Orbitron';
-  font-size:.68rem;letter-spacing:.22em;color:var(--neon);opacity:.85}
-.card .era{position:absolute;top:14px;right:16px;z-index:3;font-size:.64rem;
-  padding:.22rem .62rem;border-radius:100px;background:rgba(4,5,13,.6);
-  border:1px solid rgba(0,229,255,.35);color:#9fe6f7;backdrop-filter:blur(6px)}
-.card .snd{position:absolute;top:48px;right:16px;z-index:6;width:32px;height:32px;border-radius:50%;
-  background:rgba(4,5,13,.65);border:1px solid rgba(0,229,255,.4);color:var(--neon);
-  font-size:1rem;cursor:pointer;display:grid;place-items:center;
-  opacity:0;transition:opacity .3s,background .3s,transform .2s;backdrop-filter:blur(6px)}
-.card:hover .snd{opacity:1}
-.card .snd:hover{background:var(--neon);color:#04050d;transform:scale(1.1)}
-.card .snd.playing{animation:sndPulse 1s ease-in-out infinite}
-@keyframes sndPulse{50%{transform:scale(1.18);box-shadow:0 0 18px rgba(0,229,255,.7)}}
-@media (hover:none){.card .snd{opacity:1}}
-
-.card .info{position:absolute;bottom:0;right:0;left:0;z-index:2;padding:1.3rem 1.4rem}
-.card h3{font-size:1.1rem;font-weight:700;margin-bottom:.3rem;line-height:1.3}
-.card .artist{font-size:.76rem;color:var(--neon);letter-spacing:.06em;opacity:.9}
-
-.empty{grid-column:1/-1;text-align:center;padding:4rem 1rem;color:#6fa9c2;
-  font-size:1rem;letter-spacing:.1em}
-
-/* ============ المودال ============ */
-.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:1.4rem;
-  background:rgba(2,3,10,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  opacity:0;visibility:hidden;transition:.4s}
-.modal.open{opacity:1;visibility:visible}
-.modal .box{position:relative;display:grid;grid-template-columns:1fr 1fr;max-width:1020px;width:100%;
-  max-height:88vh;overflow:auto;border-radius:22px;
-  border:1px solid rgba(0,229,255,.35);
-  box-shadow:0 0 80px rgba(0,229,255,.25),0 0 140px rgba(177,75,255,.18);
-  transform:scale(.94);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
-.modal.open .box{transform:scale(1)}
-.modal .box::before,.modal .box::after{content:'';position:absolute;width:18px;height:18px;
-  border:1.5px solid var(--neon);opacity:.7;pointer-events:none}
-.modal .box::before{top:10px;right:10px;border-left:none;border-bottom:none}
-.modal .box::after{bottom:10px;left:10px;border-right:none;border-top:none}
-.modal img{width:100%;height:100%;object-fit:cover;min-height:360px;
-  background:linear-gradient(135deg,#1a2340,#2a1a40 50%,#0a0f1e)}
-.modal .txt{padding:2.4rem;background:linear-gradient(160deg,#0a0f1e,#06070f)}
-.modal .m-tag{font-family:'Orbitron';font-size:.66rem;letter-spacing:.3em;color:var(--neon);opacity:.75;margin-bottom:.8rem}
-.modal h2{font-size:1.7rem;margin-bottom:.55rem;line-height:1.3}
-.modal .m-artist{color:var(--neon);letter-spacing:.1em;font-size:.82rem;margin-bottom:1.6rem}
-.modal p{line-height:2;font-weight:300;color:#b9d8e8;font-size:.95rem;margin-bottom:1.8rem}
-.m-snd{display:inline-flex;align-items:center;gap:.5rem;
-  padding:.6rem 1.1rem;border-radius:100px;cursor:pointer;
-  background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.4);
-  color:var(--neon);font-family:'Cairo';font-size:.82rem;font-weight:600;
-  transition:all .3s}
-.m-snd:hover{background:var(--neon);color:#04050d;box-shadow:0 0 22px rgba(0,229,255,.5)}
-.m-snd.playing{background:var(--neon);color:#04050d}
-
-.close{position:absolute;top:16px;left:16px;z-index:10;width:42px;height:42px;border-radius:50%;
-  display:grid;place-items:center;cursor:pointer;font-size:1.3rem;color:#fff;
-  border:1px solid rgba(0,229,255,.4);background:rgba(0,229,255,.08);transition:.3s}
-.close:hover{background:var(--neon);color:#04050d;transform:rotate(90deg)}
-
-/* ============ الفوتر ============ */
-footer{position:relative;z-index:2;text-align:center;padding:3rem 1.5rem 4rem;
-  border-top:1px solid var(--line);margin-top:2rem}
-footer .f-tag{font-family:'Orbitron';font-size:.66rem;letter-spacing:.32em;color:var(--neon);opacity:.7;margin-bottom:.8rem}
-footer p{color:#6fa9c2;font-size:.8rem;letter-spacing:.05em}
-
-@media(max-width:760px){
-  .modal .box{grid-template-columns:1fr}
-  .modal img{min-height:260px}
-  .modal .txt{padding:1.6rem}
-  .row .lbl{display:none}
-  .title-wrap{padding:1.4rem 2rem}
-  .gallery{padding:2rem 1.2rem 6rem;gap:1.4rem}
-}
+.footer { text-align: center; padding: 2rem; border-top: 1px solid var(--line); color: #6fa9c2; font-size: 0.8rem; font-family: 'Orbitron'; }
 </style>
 </head>
 <body>
 
-<!-- شاشة إقلاع (تختفي بـ CSS) -->
-<div id="boot">
-  <div class="boot-inner">
-    <div class="boot-title">MIRROR</div>
-    <div class="boot-bar"><span></span></div>
-    <div class="boot-sub">INITIALIZING ARCHIVE</div>
-  </div>
+<div class="hero">
+    <h1 class="title">مِرآة</h1>
+    <p class="subtitle">أرشيف اللوحات · خارج الزمن</p>
 </div>
 
-<!-- طبقات الخلفية -->
-<canvas id="stars"></canvas>
-<div class="nebula"></div>
-<div class="grid"></div>
-<div class="scanlines"></div>
-<div class="vignette"></div>
-<div class="cursor-glow" id="cursorGlow"></div>
-<div class="scroll-progress" id="scrollProgress"></div>
-
-<!-- HERO -->
-<header class="hero">
-  <div class="hero-inner" id="heroInner">
-    <div class="title-wrap">
-      <div class="title">مِرآة</div>
-      <div class="title-reflection" aria-hidden="true">مِرآة</div>
+<div class="filters">
+    <div class="filter-group">
+        <span class="filter-label">العصر</span>
+        <div id="eraFilters" class="filter-row"></div>
     </div>
-    <p class="hero-sub">أرشيف اللوحات · خارج الزمن</p>
-    <div class="hero-status"><span class="dot"></span> SIGNAL · ONLINE</div>
-    <div class="hero-line"></div>
-  </div>
-</header>
-
-<!-- الفلاتر -->
-<section class="filters">
-  <div class="inner">
-    <div class="section-head">
-      <div class="section-tag">ARCHIVE · 001</div>
-      <h2>المجموعة الكاملة</h2>
+    <div class="filter-group">
+        <span class="filter-label">الفنان</span>
+        <div id="artistFilters" class="filter-row"></div>
     </div>
-    <div class="row">
-      <span class="lbl">العصر</span>
-      <div class="row" id="eraRow"></div>
-    </div>
-    <div class="row">
-      <span class="lbl">الفنان</span>
-      <div class="row artist-row" id="artistRow"></div>
-    </div>
-    <div class="count" id="count"></div>
-  </div>
-</section>
-
-<!-- المعرض -->
-<main class="gallery" id="gallery"></main>
-
-<!-- المودال -->
-<div class="modal" id="modal">
-  <div class="close" onclick="closeModal()">✕</div>
-  <div class="box">
-    <img id="mImg" alt="">
-    <div class="txt">
-      <div class="m-tag" id="mTag"></div>
-      <h2 id="mTitle"></h2>
-      <div class="m-artist" id="mArtist"></div>
-      <p id="mDesc"></p>
-      <button class="m-snd" id="mSnd">♪ استمع للتوقيع الصوتي</button>
-    </div>
-  </div>
 </div>
 
-<footer>
-  <div class="f-tag">MIRROR · ARCHIVE v2.0</div>
-  <p>أرشيف اللوحات · تجربة بصرية وصوتية</p>
-</footer>
+<div id="gallery" class="gallery"></div>
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <img id="mImg" src="" alt="">
+        <div class="modal-text">
+            <h2 id="mTitle" style="margin-bottom: 10px;"></h2>
+            <p id="mArtist" style="color: var(--neon); margin-bottom: 15px; font-size: 0.9rem;"></p>
+            <p id="mDesc" style="line-height: 1.8; color: #b9d8e8;"></p>
+        </div>
+    </div>
+</div>
+
+<div class="footer">MIRROR · ARCHIVE v3.0</div>
 
 <script>
-try {
-/* ================= بيانات اللوحات ================= */
+// البيانات
 const arts = [
-  { title:"الموناليزا", artist:"ليوناردو دافنشي", year:1503, era:"عصر النهضة", wiki:"Mona_Lisa",
-    desc:"ابتسامة غامضة تتحدى التفسير. كل من ينظر إليها يرى شيئًا مختلفًا، ولهذا بقيت أشهر لوحة في التاريخ." },
-  { title:"ميلاد فينوس", artist:"بوتيتشيلي", year:1485, era:"عصر النهضة", wiki:"The_Birth_of_Venus",
-    desc:"إلهة تخرج من زبد البحر على صدفة. أنقى تصوير للجمال في عصر النهضة الإيطالي." },
-  { title:"العشاء الأخير", artist:"ليوناردو دافنشي", year:1498, era:"عصر النهضة", wiki:"The_Last_Supper_(Leonardo)",
-    desc:"لحظة إعلان الخيانة، يتجمد الزمن حول مائدة واحدة. أعظم تصوير درامي في تاريخ الجداريات." },
-  { title:"خلق آدم", artist:"مايكل أنجلو", year:1512, era:"عصر النهضة", wiki:"The_Creation_of_Adam",
-    desc:"إصبعان يتقاربان ولا يتلامسان. المسافة بينهما هي سر الحياة كلها." },
-  { title:"مدرسة أثينا", artist:"رافائيل", year:1511, era:"عصر النهضة", wiki:"The_School_of_Athens",
-    desc:"كل فلاسفة اليونان في قاعة واحدة. النهضة تحلم بمشهد يجمع الحكمة كلها." },
-  { title:"حديقة الملذات الأرضية", artist:"هيرونيموس بوش", year:1510, era:"عصر النهضة", wiki:"The_Garden_of_Earthly_Delights",
-    desc:"ثلاثية من الجنة إلى الجحيم، حالمة وغريبة، تسبق عصرها بقرون." },
-  { title:"برج بابل", artist:"بيتر بروغل", year:1563, era:"عصر النهضة", wiki:"The_Tower_of_Babel_(Bruegel)",
-    desc:"برج يخترق السحاب، وتحت قدميه مدينة صاخبة. غرور البشر مرسوم بدقة صادمة." },
-  { title:"الدورية الليلية", artist:"رامبرانت", year:1642, era:"الباروك", wiki:"The_Night_Watch",
-    desc:"ضوء يقطع الظلام ليصنع مسرحًا حيًا. رامبرانت جعل الجماعة كلها أبطالًا لا شخصًا واحدًا." },
-  { title:"وصيفات الشرف", artist:"دييغو فيلاسكيز", year:1656, era:"الباروك", wiki:"Las_Meninas",
-    desc:"اللوحة تنظر إلى نفسها. الملك والملكة خلف الكاميرا، والرسام داخل الصورة، والواقع يترنح." },
-  { title:"الفتاة ذات القرط اللؤلؤي", artist:"يوهانس فيرمير", year:1665, era:"الباروك", wiki:"Girl_with_a_Pearl_Earring",
-    desc:"نظرة تستدير نحوك في لحظة أبدية. الضوء على القرط هو بطل اللوحة الحقيقي." },
-  { title:"الحرية تقود الشعب", artist:"أوجين ديلاكروا", year:1830, era:"الرومانسية", wiki:"Liberty_Leading_the_People",
-    desc:"الحرية امرأة تتقدم الصفوف. السياسة تحوّلت إلى أسطورة بصرية." },
-  { title:"طوف الميدوزا", artist:"تيودور جيريكو", year:1819, era:"الرومانسية", wiki:"The_Raft_of_the_Medusa",
-    desc:"غرقى يتصارعون على طوف في بحر متلاطم. صورة مروعة للبقاء البشري في أسوأ صوره." },
-  { title:"المتجول فوق بحر الضباب", artist:"كاسبار ديفيد فريدريش", year:1818, era:"الرومانسية", wiki:"Wanderer_above_the_Sea_of_Fog",
-    desc:"رجل يقف على قمة صخرية يحدق في بحر من الضباب. الرومانسية في أنقى صورها." },
-  { title:"الثالث من مايو 1808", artist:"فرانسيسكو جويا", year:1814, era:"الرومانسية", wiki:"The_Third_of_May_1808",
-    desc:"الظلام يبتلع ضوءًا واحدًا. جويا يرسم الجريمة قبل أن تُرتكب." },
-  { title:"الموجة العظيمة", artist:"هوكوساي", year:1831, era:"أوكييو-إي", wiki:"The_Great_Wave_off_Kanagawa",
-    desc:"الطبيعة تغضب، والبشر صغار أمامها. موجة واحدة تحمل هيبة البحر كله." },
-  { title:"أوفيليا", artist:"جون إيفريت ميليه", year:1852, era:"ما قبل رافائيل", wiki:"Ophelia_(painting)",
-    desc:"تغرق بين الزهور وهي تغني. الموت هنا ليس رعبًا، بل استسلامًا شاعريًا." },
-  { title:"والدة ويستلر", artist:"جيمس ويستلر", year:1871, era:"الواقعية", wiki:"Whistler's_Mother",
-    desc:"امرأة تجلس في صمت. صورة لهدوء لا ينتهي، ولحظة لا تريد أن تمر." },
-  { title:"انطباع، شروق الشمس", artist:"كلود مونيه", year:1872, era:"الانطباعية", wiki:"Impression,_Sunrise",
-    desc:"شمس برتقالية على ميناء ضبابي. اللوحة التي أعطت اسمًا لحركة فنية كاملة." },
-  { title:"صف الحصة", artist:"إدغار ديجا", year:1874, era:"الانطباعية", wiki:"The_Dance_Class_(Degas)",
-    desc:"فتيات ينتظرن إشارة المعلم. لحظة ترقب مرسومة بضوء ناعم." },
-  { title:"غداء على متن قارب", artist:"بيير أوغوست رينوار", year:1881, era:"الانطباعية", wiki:"Luncheon_of_the_Boating_Party",
-    desc:"شرفة على النهر وضحكات تتردد. الانطباعية تحتفل بالحياة في يوم صيفي." },
-  { title:"أحد على جزيرة لا غراند جات", artist:"جورج سورا", year:1884, era:"التنقيطية", wiki:"A_Sunday_on_La_Grande_Jatte",
-    desc:"آلاف النقاط تتجمع لتشكّل عالمًا هادئًا. الصبر يتحوّل إلى ضوء." },
-  { title:"الليلة المرصعة بالنجوم", artist:"فان جوخ", year:1889, era:"ما بعد الانطباعية", wiki:"The_Starry_Night",
-    desc:"سماء
+  { title:"الموناليزا", artist:"ليوناردو دافنشي", year:1503, era:"عصر النهضة", wiki:"Mona_Lisa", desc:"ابتسامة غامضة تتحدى التفسير. كل من ينظر إليها يرى شيئًا مختلفًا." },
+  { title:"ميلاد فينوس", artist:"بوتيتشيلي", year:1485, era:"عصر النهضة", wiki:"The_Birth_of_Venus", desc:"إلهة تخرج من زبد البحر على صدفة. أنقى تصوير للجمال." },
+  { title:"العشاء الأخير", artist:"ليوناردو دافنشي", year:1498, era:"عصر النهضة", wiki:"The_Last_Supper_(Leonardo)", desc:"لحظة إعلان الخيانة، يتجمد الزمن حول مائدة واحدة." },
+  { title:"خلق آدم", artist:"مايكل أنجلو", year:1512, era:"عصر النهضة", wiki:"The_Creation_of_Adam", desc:"إصبعان يتقاربان ولا يتلامسان. المسافة بينهما هي سر الحياة." },
+  { title:"مدرسة أثينا", artist:"رافائيل", year:1511, era:"عصر النهضة", wiki:"The_School_of_Athens", desc:"كل فلاسفة اليونان في قاعة واحدة." },
+  { title:"حديقة الملذات الأرضية", artist:"هيرونيموس بوش", year:1510, era:"عصر النهضة", wiki:"The_Garden_of_Earthly_Delights", desc:"ثلاثية من الجنة إلى الجحيم، حالمة وغريبة." },
+  { title:"برج بابل", artist:"بيتر بروغل", year:1563, era:"عصر النهضة", wiki:"The_Tower_of_Babel_(Bruegel)", desc:"برج يخترق السحاب، غرور البشر مرسوم بدقة." },
+  { title:"الدورية الليلية", artist:"رامبرانت", year:1642, era:"الباروك", wiki:"The_Night_Watch", desc:"ضوء يقطع الظلام ليصنع مسرحًا حيًا." },
+  { title:"وصيفات الشرف", artist:"دييغو فيلاسكيز", year:1656, era:"الباروك", wiki:"Las_Meninas", desc:"اللوحة تنظر إلى نفسها. الواقع يترنح." },
+  { title:"الفتاة ذات القرط اللؤلؤي", artist:"يوهانس فيرمير", year:1665, era:"الباروك", wiki:"Girl_with_a_Pearl_Earring", desc:"نظرة تستدير نحوك في لحظة أبدية." },
+  { title:"الحرية تقود الشعب", artist:"أوجين ديلاكروا", year:1830, era:"الرومانسية", wiki:"Liberty_Leading_the_People", desc:"الحرية امرأة تتقدم الصفوف. أسطورة بصرية." },
+  { title:"طوف الميدوزا", artist:"تيودور جيريكو", year:1819, era:"الرومانسية", wiki:"The_Raft_of_the_Medusa", desc:"غرقى يتصارعون على طوف. صورة مروعة للبقاء." },
+  { title:"المتجول فوق بحر الضباب", artist:"كاسبار ديفيد فريدريش", year:1818, era:"الرومانسية", wiki:"Wanderer_above_the_Sea_of_Fog", desc:"رجل يحدق في بحر من الضباب." },
+  { title:"الثالث من مايو 1808", artist:"فرانسيسكو جويا", year:1814, era:"الرومانسية", wiki:"The_Third_of_May_1808", desc:"الظلام يبتلع ضوءًا واحدًا. جويا يرسم الجريمة." },
+  { title:"الموجة العظيمة", artist:"هوكوساي", year:1831, era:"أوكييو-إي", wiki:"The_Great_Wave_off_Kanagawa", desc:"الطبيعة تغضب، والبشر صغار أمامها." },
+  { title:"أوفيليا", artist:"جون إيفريت ميليه", year:1852, era:"ما قبل رافائيل", wiki:"Ophelia_(painting)", desc:"تغرق بين الزهور وهي تغني. استسلام شاعري." },
+  { title:"والدة ويستلر", artist:"جيمس ويستلر", year:1871, era:"الواقعية", wiki:"Whistler's_Mother", desc:"امرأة تجلس في صمت. هدوء لا ينتهي." },
+  { title:"انطباع، شروق الشمس", artist:"كلود مونيه", year:1872, era:"الانطباعية", wiki:"Impression,_Sunrise", desc:"اللوحة التي أعطت اسمًا لحركة فنية كاملة." },
+  { title:"صف الحصة", artist:"إدغار ديجا", year:1874, era:"الانطباعية", wiki:"The_Dance_Class_(Degas)", desc:"فتيات ينتظرن إشارة المعلم. لحظة ترقب." },
+  { title:"غداء على متن قارب", artist:"بيير أوغوست رينوار", year:1881, era:"الانطباعية", wiki:"Luncheon_of_the_Boating_Party", desc:"شرفة على النهر وضحكات تتردد." },
+  { title:"أحد على جزيرة لا غراند جات", artist:"جورج سورا", year:1884, era:"التنقيطية", wiki:"A_Sunday_on_La_Grande_Jatte", desc:"آلاف النقاط تتجمع لتشكّل عالمًا هادئًا." },
+  { title:"الليلة المرصعة بالنجوم", artist:"فان جوخ", year:1889, era:"ما بعد الانطباعية", wiki:"The_Starry_Night", desc:"سماء تدور كأنها نهر من الضوء. فان جوخ يحول الألم لجمال." },
+  { title:"مقهى ليلي", artist:"فان جوخ", year:1888, era:"ما بعد الانطباعية", wiki:"Café_Terrace_at_Night", desc:"مقهى يتوهج في ليلة زرقاء." },
+  { title:"الصرخة", artist:"إدفارد مونك", year:1893, era:"التعبيرية", wiki:"The_Scream", desc:"وجه يذوب في موجات من القلق." },
+  { title:"القُبلة", artist:"جوستاف كليمت", year:1908, era:"الفن الجديد", wiki:"The_Kiss_(Klimt)", desc:"جسدين يتحولان إلى ذهب وزخرفة." },
+  { title:"ثبات الذاكرة", artist:"سلفادور دالي", year:1931, era:"السريالية", wiki:"The_Persistence_of_Memory", desc:"ساعات تذوب كالجبن. الزمن إحساس." },
+  { title:"غيرنيكا", artist:"بابلو بيكاسو", year:1937, era:"التكعيبية", wiki:"Guernica_(Picasso)", desc:"مدينة مقطعة إلى آلاف الأشلاء. بيكاسو يرسم الحرب." },
+  { title:"الفريدتان", artist:"فريدا كاهلو", year:1939, era:"السريالية", wiki:"The_Two_Fridas", desc:"قلبان مكشوفان وأيدٍ متشابكة." },
+  { title:"صقور الليل", artist:"إدوارد هوبر", year:1942, era:"الواقعية الأمريكية", wiki:"Nighthawks", desc:"مقهى مضيء وسط مدينة فارغة. العزلة." },
+  { title:"قوطية أمريكية", artist:"جرانت وود", year:1930, era:"الواقعية الأمريكية", wiki:"American_Gothic", desc:"وجهان جامدان أمام منزل خشبي." },
+  { title:"ابن الإنسان", artist:"رينيه ماغريت", year:1964, era:"السريالية", wiki:"The_Son_of_Man", desc:"تفاحة تخفي وجهًا. ما الذي نخفيه؟" },
+  { title:"علب حساء كامبل", artist:"آندي وارهول", year:1962, era:"بوب آرت", wiki:"Campbell's_Soup_Cans", desc:"علب حساء على رف. الاستهلاك كأيقونة." }
+];
+
+let currentEra = 'all';
+let currentArtist = 'all';
+
+const gallery = document.getElementById('gallery');
+const eraFilters = document.getElementById('eraFilters');
+const artistFilters = document.getElementById('artistFilters');
+
+// رسم المعرض
+function renderGallery() {
+    gallery.innerHTML = '';
+    let count = 0;
+    
+    arts.forEach((art, index) => {
+        if ((currentEra === 'all' || art.era === currentEra) && 
+            (currentArtist === 'all' || art.artist === currentArtist)) {
+            
+            count++;
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            // صورة مؤقتة تظهر فوراً
+            card.innerHTML = `
+                <img src="https://picsum.photos/seed/art${index}/400/500" alt="${art.title}" loading="lazy">
+                <div class="card-info">
+                    <h3 class="card-title">${art.title}</h3>
+                    <p class="card-artist">${art.artist} · ${art.year}</p>
+                </div>
+            `;
+            
+            card.onclick = () => openModal(art, index);
+            gallery.appendChild(card);
+            
+            // محاولة جلب صورة اللوحة الحقيقية في الخلفية
+            fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${art.wiki}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.originalimage && data.originalimage.source) {
+                        card.querySelector('img').src = data.originalimage.source;
+                    } else if (data.thumbnail && data.thumbnail.source) {
+                        card.querySelector('img').src = data.thumbnail.source;
+                    }
+                })
+                .catch(() => {}); 
+        }
+    });
+    
+    if (count === 0) {
+        gallery.innerHTML = '<p style="text-align:center; width:100%; color:#6fa9c2; grid-column: 1/-1;">لا توجد لوحات مطابقة</p>';
+    }
+}
+
+// رسم الفلاتر
+function renderFilters() {
+    const eras = ['all', ...new Set(arts.map(a => a.era))];
+    const artists = ['all', ...new Set(arts.map(a => a.artist))];
+    
+    eraFilters.innerHTML = eras.map(e => 
+        `<button class="chip ${currentEra === e ? 'active' : ''}" onclick="setEra('${e}')">${e === 'all' ? 'كل العصور' : e}</button>`
+    ).join('');
+    
+    artistFilters.innerHTML = artists.map(a => 
+        `<button class="chip ${currentArtist === a ? 'active' : ''}" onclick="setArtist('${a}')">${a === 'all' ? 'كل الفنانين' : a}</button>`
+    ).join('');
+}
+
+window.setEra = (era) => { currentEra = era; renderFilters(); renderGallery(); };
+window.setArtist = (artist) => { currentArtist = artist; renderFilters(); renderGallery(); };
+
+// المودال
+window.openModal = (art, index) => {
+    document.getElementById('mImg').src = `https://picsum.photos/seed/art${index}/800/600`;
+    document.getElementById('mTitle').textContent = art.title;
+    document.getElementById('mArtist').textContent = `${art.artist} · ${art.year} · ${art.era}`;
+    document.getElementById('mDesc').textContent = art.desc;
+    
+    fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${art.wiki}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.originalimage && data.originalimage.source) {
+                document.getElementById('mImg').src = data.originalimage.source;
+            }
+        })
+        .catch(() => {});
+        
+    document.getElementById('modal').classList.add('open');
+};
+
+window.closeModal = () => {
+    document.getElementById('modal').classList.remove('open');
+};
+
+// بدء التشغيل
+renderFilters();
+renderGallery();
+</script>
+</body>
+</html>
