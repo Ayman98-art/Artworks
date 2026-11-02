@@ -1,101 +1,164 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <title>مِرآة | أرشيف اللوحات</title>
-    <!-- هنا ظبطنا حرف الـ S الكبير -->
-    <link rel="stylesheet" href="Style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>مِرآة | أرشيف اللوحات</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root { --neon:#00e5ff; --violet:#b14bff; --ink:#04050d; --line:rgba(0,229,255,.16); }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background-color: var(--ink); color: #dff3ff; font-family: 'Cairo', sans-serif; overflow-x: hidden; min-height: 100vh; }
+
+body::before { content: ""; position: fixed; inset: 0; z-index: -2; background-image: radial-gradient(circle at 15% 50%, rgba(177,75,255,.08), transparent 40%), radial-gradient(circle at 85% 30%, rgba(0,229,255,.08), transparent 40%); }
+body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: linear-gradient(rgba(0,229,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,.03) 1px, transparent 1px); background-size: 60px 60px; }
+
+.hero { min-height: 30vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem 1rem 1rem; }
+.title { font-family: 'Orbitron'; font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 900; background: linear-gradient(180deg, #fff, var(--neon), var(--violet)); -webkit-background-clip: text; color: transparent; }
+.subtitle { margin-top: 0.5rem; letter-spacing: 0.3em; color: #8fd8ef; font-size: 0.9rem; }
+
+.filters { position: sticky; top: 0; background: rgba(4,5,13,0.95); padding: 0.8rem 1rem; border-bottom: 1px solid var(--line); z-index: 50; }
+.filter-group { margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.filter-label { color: var(--neon); font-size: 0.75rem; font-family: 'Orbitron'; min-width: 45px;}
+.filter-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+.filter-row::-webkit-scrollbar { display: none; }
+.chip { padding: 4px 10px; border-radius: 15px; border: 1px solid var(--line); background: rgba(255,255,255,0.02); color: #a9d3e4; cursor: pointer; white-space: nowrap; font-family: 'Cairo'; font-size: 0.75rem; transition: 0.2s; }
+.chip:hover { border-color: var(--neon); }
+.chip.active { background: var(--neon); color: #000; font-weight: bold; border-color: var(--neon); }
+
+.counter { text-align: center; color: #6fa9c2; font-size: 0.85rem; margin-top: 1rem; font-family: 'Cairo'; }
+
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; padding: 1rem 1rem 3rem; max-width: 1200px; margin: 0 auto; }
+.card { background: #080b16; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.2s; }
+.card:hover { border-color: var(--neon); transform: translateY(-3px); }
+.card img { width: 100%; height: 260px; object-fit: cover; display: block; background: #111; transition: 0.3s; }
+.card-info { padding: 10px; }
+.card-title { font-size: 0.95rem; margin-bottom: 3px; font-weight: 700; color:#fff; }
+.card-artist { color: var(--neon); font-size: 0.7rem; }
+
+.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 100; }
+.modal.open { display: flex; }
+.modal-content { background: #0a0f1e; border: 1px solid var(--neon); border-radius: 15px; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; }
+.modal-content img { width: 100%; max-height: 45vh; object-fit: contain; background: #000; }
+.modal-text { padding: 20px; }
+.modal-title { font-size: 1.3rem; margin-bottom: 5px; color: #fff; }
+.modal-artist { color: var(--neon); margin-bottom: 15px; font-size: 0.85rem; font-family: 'Orbitron'; }
+.modal-desc { line-height: 1.8; color: #b9d8e8; font-size: 0.95rem; }
+.close-btn { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid var(--neon); border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 18px; z-index: 10;}
+.close-btn:hover { background: var(--neon); color: #000; }
+
+#scrollTop { position: fixed; bottom: 20px; left: 20px; width: 45px; height: 45px; border-radius: 50%; background: rgba(4,5,13,0.8); border: 1px solid var(--neon); color: var(--neon); font-size: 22px; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 90; }
+#scrollTop:hover { background: var(--neon); color: #000; }
+
+.footer { text-align: center; padding: 1.5rem; border-top: 1px solid var(--line); color: #6fa9c2; font-size: 0.75rem; font-family: 'Orbitron'; }
+</style>
 </head>
 <body>
 
-    <div class="hero">
-        <h1 class="title">مِرآة</h1>
-        <p class="subtitle">أرشيف اللوحات · خارج الزمن</p>
-    </div>
+<div class="hero">
+    <h1 class="title">مِرآة</h1>
+    <p class="subtitle">أرشيف اللوحات · خارج الزمن</p>
+</div>
 
-    <div class="filters">
-        <div class="filter-group">
-            <span class="filter-label">العصر</span>
-            <div class="filter-row" id="eraFilters">
-                <button class="chip active" onclick="filterCards('era', 'all', this)">الكل</button>
-                <button class="chip" onclick="filterCards('era', 'عصر النهضة', this)">عصر النهضة</button>
-                <button class="chip" onclick="filterCards('era', 'الباروك', this)">الباروك</button>
-                <button class="chip" onclick="filterCards('era', 'الرومانسية', this)">الرومانسية</button>
-                <button class="chip" onclick="filterCards('era', 'أوكييو-إي', this)">أوكييو-إي</button>
-                <button class="chip" onclick="filterCards('era', 'ما قبل رافائيل', this)">ما قبل رافائيل</button>
-                <button class="chip" onclick="filterCards('era', 'الواقعية', this)">الواقعية</button>
-                <button class="chip" onclick="filterCards('era', 'الانطباعية', this)">الانطباعية</button>
-                <button class="chip" onclick="filterCards('era', 'التنقيطية', this)">التنقيطية</button>
-                <button class="chip" onclick="filterCards('era', 'ما بعد الانطباعية', this)">ما بعد الانطباعية</button>
-                <button class="chip" onclick="filterCards('era', 'التعبيرية', this)">التعبيرية</button>
-                <button class="chip" onclick="filterCards('era', 'الفن الجديد', this)">الفن الجديد</button>
-                <button class="chip" onclick="filterCards('era', 'السريالية', this)">السريالية</button>
-                <button class="chip" onclick="filterCards('era', 'التكعيبية', this)">التكعيبية</button>
-                <button class="chip" onclick="filterCards('era', 'الواقعية الأمريكية', this)">الواقعية الأمريكية</button>
-                <button class="chip" onclick="filterCards('era', 'بوب آرت', this)">بوب آرت</button>
-            </div>
-        </div>
-        <div class="filter-group">
-            <span class="filter-label">الفنان</span>
-            <div class="filter-row" id="artistFilters">
-                <button class="chip active" onclick="filterCards('artist', 'all', this)">الكل</button>
-                <button class="chip" onclick="filterCards('artist', 'ليوناردو دافنشي', this)">ليوناردو دافنشي</button>
-                <button class="chip" onclick="filterCards('artist', 'بوتيتشيلي', this)">بوتيتشيلي</button>
-                <button class="chip" onclick="filterCards('artist', 'مايكل أنجلو', this)">مايكل أنجلو</button>
-                <button class="chip" onclick="filterCards('artist', 'رافائيل', this)">رافائيل</button>
-                <button class="chip" onclick="filterCards('artist', 'هيرونيموس بوش', this)">هيرونيموس بوش</button>
-                <button class="chip" onclick="filterCards('artist', 'بيتر بروغل', this)">بيتر بروغل</button>
-                <button class="chip" onclick="filterCards('artist', 'رامبرانت', this)">رامبرانت</button>
-                <button class="chip" onclick="filterCards('artist', 'دييغو فيلاسكيز', this)">دييغو فيلاسكيز</button>
-                <button class="chip" onclick="filterCards('artist', 'يوهانس فيرمير', this)">يوهانس فيرمير</button>
-                <button class="chip" onclick="filterCards('artist', 'أوجين ديلاكروا', this)">أوجين ديلاكروا</button>
-                <button class="chip" onclick="filterCards('artist', 'تيودور جيريكو', this)">تيودور جيريكو</button>
-                <button class="chip" onclick="filterCards('artist', 'كاسبار ديفيد فريدريش', this)">كاسبار ديفيد فريدريش</button>
-                <button class="chip" onclick="filterCards('artist', 'فرانسيسكو جويا', this)">فرانسيسكو جويا</button>
-                <button class="chip" onclick="filterCards('artist', 'هوكوساي', this)">هوكوساي</button>
-                <button class="chip" onclick="filterCards('artist', 'جون إيفريت ميليه', this)">جون إيفريت ميليه</button>
-                <button class="chip" onclick="filterCards('artist', 'جيمس ويستلر', this)">جيمس ويستلر</button>
-                <button class="chip" onclick="filterCards('artist', 'كلود مونيه', this)">كلود مونيه</button>
-                <button class="chip" onclick="filterCards('artist', 'إدغار ديجا', this)">إدغار ديجا</button>
-                <button class="chip" onclick="filterCards('artist', 'بيير أوغوست رينوار', this)">بيير أوغوست رينوار</button>
-                <button class="chip" onclick="filterCards('artist', 'جورج سورا', this)">جورج سورا</button>
-                <button class="chip" onclick="filterCards('artist', 'فان جوخ', this)">فان جوخ</button>
-                <button class="chip" onclick="filterCards('artist', 'إدفارد مونك', this)">إدفارد مونك</button>
-                <button class="chip" onclick="filterCards('artist', 'جوستاف كليمت', this)">جوستاف كليمت</button>
-                <button class="chip" onclick="filterCards('artist', 'سلفادور دالي', this)">سلفادور دالي</button>
-                <button class="chip" onclick="filterCards('artist', 'بابلو بيكاسو', this)">بابلو بيكاسو</button>
-                <button class="chip" onclick="filterCards('artist', 'فريدا كاهلو', this)">فريدا كاهلو</button>
-                <button class="chip" onclick="filterCards('artist', 'إدوارد هوبر', this)">إدوارد هوبر</button>
-                <button class="chip" onclick="filterCards('artist', 'جرانت وود', this)">جرانت وود</button>
-                <button class="chip" onclick="filterCards('artist', 'رينيه ماغريت', this)">رينيه ماغريت</button>
-                <button class="chip" onclick="filterCards('artist', 'آندي وارهول', this)">آندي وارهول</button>
-            </div>
+<div class="filters">
+    <div class="filter-group">
+        <span class="filter-label">العصر</span>
+        <div class="filter-row" id="eraFilters">
+            <button class="chip active" onclick="filterCards('era', 'all', this)">الكل</button>
+            <button class="chip" onclick="filterCards('era', 'عصر النهضة', this)">عصر النهضة</button>
+            <button class="chip" onclick="filterCards('era', 'الباروك', this)">الباروك</button>
+            <button class="chip" onclick="filterCards('era', 'الرومانسية', this)">الرومانسية</button>
+            <button class="chip" onclick="filterCards('era', 'أوكييو-إي', this)">أوكييو-إي</button>
+            <button class="chip" onclick="filterCards('era', 'ما قبل رافائيل', this)">ما قبل رافائيل</button>
+            <button class="chip" onclick="filterCards('era', 'الواقعية', this)">الواقعية</button>
+            <button class="chip" onclick="filterCards('era', 'الانطباعية', this)">الانطباعية</button>
+            <button class="chip" onclick="filterCards('era', 'التنقيطية', this)">التنقيطية</button>
+            <button class="chip" onclick="filterCards('era', 'ما بعد الانطباعية', this)">ما بعد الانطباعية</button>
+            <button class="chip" onclick="filterCards('era', 'التعبيرية', this)">التعبيرية</button>
+            <button class="chip" onclick="filterCards('era', 'الفن الجديد', this)">الفن الجديد</button>
+            <button class="chip" onclick="filterCards('era', 'السريالية', this)">السريالية</button>
+            <button class="chip" onclick="filterCards('era', 'التكعيبية', this)">التكعيبية</button>
+            <button class="chip" onclick="filterCards('era', 'الواقعية الأمريكية', this)">الواقعية الأمريكية</button>
+            <button class="chip" onclick="filterCards('era', 'بوب آرت', this)">بوب آرت</button>
         </div>
     </div>
-
-    <div class="counter" id="counter">جاري التحميل...</div>
-
-    <div class="gallery" id="gallery"></div>
-
-    <button id="scrollTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
-
-    <div id="modal" class="modal" onclick="if(event.target.id === 'modal') closeModal()">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal()">×</button>
-            <img id="mImg" src="" alt="">
-            <div class="modal-text">
-                <h2 id="mTitle" class="modal-title"></h2>
-                <p id="mArtist" class="modal-artist"></p>
-                <p id="mDesc" class="modal-desc"></p>
-            </div>
+    <div class="filter-group">
+        <span class="filter-label">الفنان</span>
+        <div class="filter-row" id="artistFilters">
+            <button class="chip active" onclick="filterCards('artist', 'all', this)">الكل</button>
+            <button class="chip" onclick="filterCards('artist', 'ليوناردو دافنشي', this)">ليوناردو دافنشي</button>
+            <button class="chip" onclick="filterCards('artist', 'بوتيتشيلي', this)">بوتيتشيلي</button>
+            <button class="chip" onclick="filterCards('artist', 'مايكل أنجلو', this)">مايكل أنجلو</button>
+            <button class="chip" onclick="filterCards('artist', 'رافائيل', this)">رافائيل</button>
+            <button class="chip" onclick="filterCards('artist', 'هيرونيموس بوش', this)">هيرونيموس بوش</button>
+            <button class="chip" onclick="filterCards('artist', 'بيتر بروغل', this)">بيتر بروغل</button>
+            <button class="chip" onclick="filterCards('artist', 'رامبرانت', this)">رامبرانت</button>
+            <button class="chip" onclick="filterCards('artist', 'دييغو فيلاسكيز', this)">دييغو فيلاسكيز</button>
+            <button class="chip" onclick="filterCards('artist', 'يوهانس فيرمير', this)">يوهانس فيرمير</button>
+            <button class="chip" onclick="filterCards('artist', 'أوجين ديلاكروا', this)">أوجين ديلاكروا</button>
+            <button class="chip" onclick="filterCards('artist', 'تيودور جيريكو', this)">تيودور جيريكو</button>
+            <button class="chip" onclick="filterCards('artist', 'كاسبار ديفيد فريدريش', this)">كاسبار ديفيد فريدريش</button>
+            <button class="chip" onclick="filterCards('artist', 'فرانسيسكو جويا', this)">فرانسيسكو جويا</button>
+            <button class="chip" onclick="filterCards('artist', 'هوكوساي', this)">هوكوساي</button>
+            <button class="chip" onclick="filterCards('artist', 'جون إيفريت ميليه', this)">جون إيفريت ميليه</button>
+            <button class="chip" onclick="filterCards('artist', 'جيمس ويستلر', this)">جيمس ويستلر</button>
+            <button class="chip" onclick="filterCards('artist', 'كلود مونيه', this)">كلود مونيه</button>
+            <button class="chip" onclick="filterCards('artist', 'إدغار ديجا', this)">إدغار ديجا</button>
+            <button class="chip" onclick="filterCards('artist', 'بيير أوغوست رينوار', this)">بيير أوغوست رينوار</button>
+            <button class="chip" onclick="filterCards('artist', 'جورج سورا', this)">جورج سورا</button>
+            <button class="chip" onclick="filterCards('artist', 'فان جوخ', this)">فان جوخ</button>
+            <button class="chip" onclick="filterCards('artist', 'إدفارد مونك', this)">إدفارد مونك</button>
+            <button class="chip" onclick="filterCards('artist', 'جوستاف كليمت', this)">جوستاف كليمت</button>
+            <button class="chip" onclick="filterCards('artist', 'سلفادور دالي', this)">سلفادور دالي</button>
+            <button class="chip" onclick="filterCards('artist', 'بابلو بيكاسو', this)">بابلو بيكاسو</button>
+            <button class="chip" onclick="filterCards('artist', 'فريدا كاهلو', this)">فريدا كاهلو</button>
+            <button class="chip" onclick="filterCards('artist', 'إدوارد هوبر', this)">إدوارد هوبر</button>
+            <button class="chip" onclick="filterCards('artist', 'جرانت وود', this)">جرانت وود</button>
+            <button class="chip" onclick="filterCards('artist', 'رينيه ماغريت', this)">رينيه ماغريت</button>
+            <button class="chip" onclick="filterCards('artist', 'آندي وارهول', this)">آندي وارهول</button>
         </div>
     </div>
+</div>
 
-    <div class="footer">MIRROR · ARCHIVE v7.0</div>
+<div class="counter" id="counter">جاري التحميل...</div>
 
-    <!-- هنا ظبطنا حرف الـ A الكبير -->
-    <script src="App.js"></script>
-</body>
-</html>
+<div class="gallery" id="gallery"></div>
+
+<button id="scrollTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+<div id="modal" class="modal" onclick="if(event.target.id === 'modal') closeModal()">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <img id="mImg" src="" alt="">
+        <div class="modal-text">
+            <h2 id="mTitle" class="modal-title"></h2>
+            <p id="mArtist" class="modal-artist"></p>
+            <p id="mDesc" class="modal-desc"></p>
+        </div>
+    </div>
+</div>
+
+<div class="footer">MIRROR · ARCHIVE v7.1</div>
+
+<script>
+var arts = [
+  { title:"الموناليزا", artist:"ليوناردو دافنشي", year:1503, era:"عصر النهضة", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/600px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg", desc:"لوحة تتحدى الزمن. الابتسامة الغامضة والطبيعة الخلفية غير المكتملة يخلقان إحساسًا بأن اللوحة حية وتتغير أمام عينيك. دافنشي استخدم تقنية السفوماتو ليصنع ملامح لا تبدو صلبة، لتعبر عن الغموض البشري والتوتر بين الروح والطبيعة." },
+  { title:"ميلاد فينوس", artist:"بوتيتشيلي", year:1485, era:"عصر النهضة", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/800px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg", desc:"تخيل الجمال الإلهي وهو يخرج من البحر. اللوحة بتمثل النقاء والطبيعة، ورياح الربيع بتدفع فينوس ناحية الشاطئ. بوتيتشيلي هنا مش بيرسم واقع، هو بيرسم أسطورة شاعرية بتعبر عن الجمال المثالي والروحانية اللي عصر النهضة كان بيدور عليها." },
+  { title:"العشاء الأخير", artist:"ليوناردو دافنشي", year:1498, era:"عصر النهضة", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/The_Last_Supper_-_Leonardo_Da_Vinci_-_High_Resolution_32x16.jpg/800px-The_Last_Supper_-_Leonardo_Da_Vinci_-_High_Resolution_32x16.jpg", desc:"اللوحة مش عن الأكل، هي لحظة الصدمة! المسيح لسه بيقول واحد فيكم هيسلمني، وكل التلاميذ في حالة ذهول وصدمة. دافنشي رتب الـ 12 شخص في 3 مجموعات عشان يحكي قصة الخيانة والوفاء في ثانية واحدة." },
+  { title:"خلق آدم", artist:"مايكل أنجلو", year:1512, era:"عصر النهضة", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg/800px-Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg", desc:"نقطة التلامس بين إصبع الله وإصبع آدم هي سر الحياة. آدم بيبان خامل ومسترخي، ربنا بيبعت له الطاقة. اللوحة بتعبر عن لحظة بداية الحياة، والفجوة الصغيرة بين الإصبعين خلقت توتر خالد بيجذب العين." },
+  { title:"مدرسة أثينا", artist:"رافائيل", year:1511, era:"عصر النهضة", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg/800px-%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg", desc:"حلم عصر النهضة في لوحة واحدة. كل فلاسفة وعلماء اليونان اتجمعوا في قاعة واحدة (أفلاطون وأرسطو في النص). رافائيل هنا بيحتفل بالعقل البشري والبحث عن الحقيقة، وكأنه بيقول إن العلم والفكر بيتكملوا مع بعض." },
+  { title:"حديقة الملذات الأرضية", artist:"هيرونيموس بوش", year:1510, era:"عصر النهضة", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg/800px-The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg", desc:"رحلة سريالية بين الجنة (يسار)، الملذات (وسط)، والجحيم (يمين). اللوحة مليانة تفاصيل غريبة وكائنات خرافية. بوش كان بيحذر البشر من الانغماس في الشهوات، واللوحة بتبان كأنها كابوس مرئي عن مصير الإنسان." },
+  { title:"برج بابل", artist:"بيتر بروغل", year:1563, era:"عصر النهضة", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Pieter_Bruegel_the_Elder_-_The_Tower_of_Babel_%28Vienna%29_-_Google_Art_Project_-_edited.jpg/800px-Pieter_Bruegel_the_Elder_-_The_Tower_of_Babel_%28Vienna%29_-_Google_Art_Project_-_edited.jpg", desc:"البرج بيرمز للغرور البشري. البشر بيحاولوا يبنوا حاجة توصل للسما بجهدهم، لكن البناء مهزوز ومش مكتمل. اللوحة بتعبر عن فشل الطموح البشري لما بيبقى بعيد عن الحكمة، وبتشبه المدن الحديثة المزدحمة اللي بتدور على المستحيل." },
+  { title:"الدورية الليلية", artist:"رامبرانت", year:1642, era:"الباروك", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/The_Night_Watch_-_HD.jpg/800px-The_Night_Watch_-_HD.jpg", desc:"رامبرانت كسر قاعدة رسم الشخصيات، ورسم الحركة. الضوء واقع على القبطان ومساعده، والباقي في ظل. اللوحة بتحسسك إن فيه حدث لسه بيحصل، مش مجرد صورة. بتعبر عن الانتماء والحركة في ظل ظلام دامس." },
+  { title:"وصيفات الشرف", artist:"دييغو فيلاسكيز", year:1656, era:"الباروك", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Las_Meninas_01.jpg/800px-Las_Meninas_01.jpg", desc:"اللوحة دي عبارة عن ألغاز! الرسام راسم نفسه وهو بيرسم، والطفلة (الملكة الصغيرة) بتتفرج. الملك والملكة بيبانوا في المرايا في الخلف. اللوحة بتسأل: مين اللي بيتم رسمه؟ مين اللي بيراقب؟ بتعبر عن تعقيد الواقع وفكرة الصورة داخل الصورة." },
+  { title:"الفتاة ذات القرط اللؤلؤي", artist:"يوهانس فيرمير", year:1665, era:"الباروك", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Meisje_met_de_parel.jpg/600px-Meisje_met_de_parel.jpg", desc:"بيسموها موناليزا الشمال. فيرمير ركز على الضوء اللي واقع على وشها والقرط. اللحظة اللي هي بتلف فيها لورا وتفرج علينا بحياء وسرية. بتعبر عن البساطة، الجمال الهادي، والغموض اللي في نظرة العين." },
+  { title:"الحرية تقود الشعب", artist:"أوجين ديلاكروا", year:1830, era:"الرومانسية", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Eug%C3%A8ne_Delacroix_-_Le_28_Juillet._La_Libert%C3%A9_guidant_le_peuple.jpg/800px-Eug%C3%A8ne_Delacroix_-_Le_28_Juillet._La_Libert%C3%A9_guidant_le_peuple.jpg", desc:"الست اللي في النص هي رمز الحرية، بتقود الشعب فوق الجثث والدمار. اللوحة بتحكي عن ثورة 1830 في فرنسا. بتعبر عن التضحية، الشجاعة، والأمل في بكرة أحسن مهما كان الحاضر صعب." },
+  { title:"طوف الميدوزا", artist:"تيودور جيريكو", year:1819, era:"الرومانسية", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/JEAN_LOUIS_TH%C3%89ODORE_G%C3%89RICAULT_-_La_Balsa_de_la_Medusa_%28Museo_del_Louvre%2C_1818-19%29.jpg/800px-JEAN_LOUIS_TH%C3%89ODORE_G%C3%89RICAULT_-_La_Balsa_de_la_Medusa_%28Museo_del_Louvre%2C_1818-19%29.jpg", desc:"قصة حقيقية لسفينة غرقت والتخلي عن الركاب. اللوحة بترسم لحظة الصراع بين الأمل (بيحاولوا يلوحوا لسفينة إنقاذ) واليأس والموت. بتعبر عن هشاشة الإنسان وقسوة الطبيعة، وبتعكس فساد المسؤولين اللي سابوا الشعب يموت." },
+  { title:"المتجول فوق بحر الضباب", artist:"كاسبار ديفيد فريدريش", year:1818, era:"الرومانسية", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpeg/600px-Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpeg", desc:"راجل واقف لوحده بيتأمل في بحر من الضباب. اللوحة مش عن الشخص، دي عن الإحساس. بتعبر عن عظمة الطبيعة أمام ضعف الإنسان، والتأمل، والوحدة. من أشهر لوحات الرومانسية اللي بتحسسك بالفناء وأنت بتتفرج." },
+  { title:"الثالث من مايو 1808", artist:"فرانسيسكو جويا", year:1814, era:"الرومانسية", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/El_tres_de_mayo_de_1808_en_Madrid%2C_por_Francisco_de_Goya_%28Museo_del_Prado%29.jpg/800px-El_tres_de_mayo_de_1808_en_Madrid%2C_por_Francisco_de_Goya_%28Museo_del_Prado%29.jpg", desc:"جويا هنا بيرسم جرح في التاريخ. الجيش الفرنسي بيعمل إعدامات لمدنيين إسبان. الراجل اللي لابس أبيض ورافع إيديه، والدم اللي على الأرض. بتعبر عن فظاعة الحرب ووجهها القبيح، ومفيش مجد هنا، فيه موت بس." },
+  { title:"الموجة العظيمة", artist:"هوكوساي", year:1831, era:"أوكييو-إي", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Tsunami_by_hokusai_19th_century.jpg/800px-Tsunami_by_hokusai_19th_century.jpg", desc:"الموجة عالية كأنها وحش هيهجم على القوارب. جبل فوجي واقف في الخلف بثبات. اللوحة بتعبر عن التوازن بين قوة الطبيعة المدمرة وهدوء الجبل. بتعكس فلسفة يابانية عن الاحترام للطبيعة والخوف منها في نفس الوقت." },
+  { title:"أوفيليا", artist:"جون إيفريت ميليه", year:1852, era:"ما قبل رافائيل", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/John_Everett_Millais_-_Ophelia_-_Google_Art_Project.jpg/800px-John_Everett_Millais_-_Ophelia_-_Google_Art_Project.jpg", desc:"مشهد غرق أوفيليا من مسرحيات شكسبير. هي بتموت وسط الزهور والزينة، وبتغني. اللوحة بتحول الموت لمشهد جمال شاعري. بتعبر عن الجنون، الحب المرفوض، والنهاية الهادية الحزينة، مع تفاصيل رهيبة لكل زهرة." },
+  { title:"والدة ويستلر", artist:"جيمس ويستلر", year:1871, era:"الواقعية", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Whistlers_Mother_high_res.jpg/600px-Whistlers_Mother_high_res.jpg", desc:"لوحة بسيطة جدًا لست كبيرة بتقعد على كرسي في غرفة هادية. ويستلر قال عنها ترتيب في الرمادي والأسود. مش عن الشخص، دي عن الهارموني والشكل. بتعبر عن الهدوء، الرزانة، والشعور بالأمان اللي بيديه الحضن." },
+  { title:"انطباع، شروق الشمس", artist:"كلود مونيه", year:1872, era:"الانطباعية", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Claude_Monet%2C_Impression%2C_soleil_levant.jpg/800px-Claude_Monet%2C_Impression%2C_soleil_levant.jpg", desc:"شمس برتقالية بتشرق على ميناء ضبابي. مفيش تفاصيل دقيقة، مفيش خطوط واضحة، كله ضربات فرشاة سريعة. اللوحة دي هي اللي بدأت حركة الانطباعية، وبتعبر عن اللحظة العابرة والإحساس السريع بالضوء والجو." },
+  { title:"صف الحصة", artist:"إدغار ديجا", year:1874, era:"الانطباعية", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Edgar_Degas_-_The_Dance_Class_-_Google_Art_Project.jpg/800px-Edgar_Degas_-_The_Dance_Class_-_Google_Art_Project.jpg", desc:"ديجا كان بيحب يرسم الحركة. فتيات الباليه مش بيستعرضوا، بالعكس ده هما مرهقين ومستنيين إشارة المعلم. اللوحة بتعبر عن الكواليس، التعب، الانضباط، والجهد اللي ورا الجمال، مع زوايا غريبة ومبتكرة." },
+  { title:"غداء على متن قارب", artist:"بيير أوغوست رينوار", year:1881, era:"الانطباعية", img:"https://upload.wikime
