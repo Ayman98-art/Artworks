@@ -11,42 +11,75 @@
     --line:rgba(0,229,255,.16);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--ink); color: #dff3ff; font-family: 'Cairo', sans-serif; overflow-x: hidden; }
+body { 
+    background-color: var(--ink); 
+    color: #dff3ff; 
+    font-family: 'Cairo', sans-serif; 
+    overflow-x: hidden; 
+    position: relative;
+    min-height: 100vh;
+}
+
+/* خلفية خفيفة جداً (CSS فقط) عشان متتقلش الموقع */
+body::before {
+    content: ""; position: fixed; inset: 0; z-index: -2;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(177,75,255,.08), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(0,229,255,.08), transparent 40%);
+}
+body::after {
+    content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background-image: 
+        linear-gradient(rgba(0,229,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(circle at center, black, transparent 80%);
+    -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%);
+}
 
 /* شاشة البداية */
-.hero { min-height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
-.title { font-family: 'Orbitron'; font-size: clamp(3rem, 10vw, 7rem); font-weight: 900; background: linear-gradient(180deg, #fff, var(--neon), var(--violet)); -webkit-background-clip: text; color: transparent; }
-.subtitle { margin-top: 1.5rem; letter-spacing: 0.3em; color: #8fd8ef; font-size: 1rem; }
+.hero { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 3rem 1rem; }
+.title { font-family: 'Orbitron'; font-size: clamp(3rem, 10vw, 7rem); font-weight: 900; background: linear-gradient(180deg, #fff, var(--neon), var(--violet)); -webkit-background-clip: text; color: transparent; filter: drop-shadow(0 0 20px rgba(0,229,255,0.3)); }
+.subtitle { margin-top: 1rem; letter-spacing: 0.3em; color: #8fd8ef; font-size: 1rem; }
 
 /* الفلاتر */
-.filters { position: sticky; top: 0; background: rgba(4,5,13,0.95); backdrop-filter: blur(10px); padding: 1rem; border-bottom: 1px solid var(--line); z-index: 10; }
+.filters { position: sticky; top: 0; background: rgba(4,5,13,0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 1rem; border-bottom: 1px solid var(--line); z-index: 50; }
 .filter-group { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
 .filter-label { color: var(--neon); font-size: 0.85rem; font-family: 'Orbitron'; min-width: 50px;}
 .filter-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
 .filter-row::-webkit-scrollbar { display: none; }
-.chip { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--line); background: transparent; color: #a9d3e4; cursor: pointer; white-space: nowrap; font-family: 'Cairo'; font-size: 0.85rem; transition: 0.2s; }
+.chip { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--line); background: rgba(255,255,255,0.02); color: #a9d3e4; cursor: pointer; white-space: nowrap; font-family: 'Cairo'; font-size: 0.85rem; transition: 0.2s; }
 .chip:hover { border-color: var(--neon); color: #fff; }
 .chip.active { background: var(--neon); color: #000; font-weight: bold; border-color: var(--neon); box-shadow: 0 0 15px rgba(0,229,255,0.4); }
 
 /* المعرض */
 .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; padding: 2rem 1.5rem; max-width: 1200px; margin: 0 auto; }
-.card { background: #080b16; border: 1px solid var(--line); border-radius: 15px; overflow: hidden; cursor: pointer; transition: 0.3s; }
-.card:hover { border-color: var(--neon); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-.card img { width: 100%; height: 320px; object-fit: cover; display: block; }
-.card-info { padding: 15px; }
+.card { background: #080b16; border: 1px solid var(--line); border-radius: 15px; overflow: hidden; cursor: pointer; transition: all 0.3s ease; }
+.card:hover { border-color: var(--neon); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,229,255,0.15); }
+.card img { width: 100%; height: 320px; object-fit: cover; display: block; transition: transform 0.5s; }
+.card:hover img { transform: scale(1.05); }
+.card-info { padding: 15px; position: relative; z-index: 2; background: #080b16;}
 .card-title { font-size: 1.1rem; margin-bottom: 5px; font-weight: 700; }
 .card-artist { color: var(--neon); font-size: 0.8rem; }
 
-/* المودال (النافذة المنبثقة) */
-.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 100; backdrop-filter: blur(5px); }
+/* المودال */
+.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 100; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .modal.open { display: flex; }
 .modal-content { background: #0a0f1e; border: 1px solid var(--neon); border-radius: 15px; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 0 50px rgba(0,229,255,0.2); }
-.modal-content img { width: 100%; max-height: 50vh; object-fit: contain; background: #000; }
+.modal-content img { width: 100%; max-height: 45vh; object-fit: contain; background: #000; }
 .modal-text { padding: 25px; }
-.close-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid var(--neon); border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+.modal-title { font-size: 1.5rem; margin-bottom: 5px; color: #fff; }
+.modal-artist { color: var(--neon); margin-bottom: 20px; font-size: 0.9rem; font-family: 'Orbitron'; }
+.modal-desc { line-height: 2; color: #b9d8e8; font-size: 1.05rem; }
+.close-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid var(--neon); border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: 0.2s; z-index: 10;}
 .close-btn:hover { background: var(--neon); color: #000; }
 
-.footer { text-align: center; padding: 2rem; border-top: 1px solid var(--line); color: #6fa9c2; font-size: 0.8rem; font-family: 'Orbitron'; }
+/* زرار الطلوع لفوق */
+#scrollTop { position: fixed; bottom: 25px; left: 25px; width: 50px; height: 50px; border-radius: 50%; background: rgba(4,5,13,0.8); border: 1px solid var(--neon); color: var(--neon); font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 90; backdrop-filter: blur(5px); box-shadow: 0 0 15px rgba(0,229,255,0.2); }
+#scrollTop.show { opacity: 1; visibility: visible; }
+#scrollTop:hover { background: var(--neon); color: #000; transform: translateY(-5px); }
+
+.footer { text-align: center; padding: 2rem; border-top: 1px solid var(--line); color: #6fa9c2; font-size: 0.8rem; font-family: 'Orbitron'; margin-top: 2rem;}
 </style>
 </head>
 <body>
@@ -69,55 +102,57 @@ body { background: var(--ink); color: #dff3ff; font-family: 'Cairo', sans-serif;
 
 <div id="gallery" class="gallery"></div>
 
-<div id="modal" class="modal">
+<button id="scrollTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+<div id="modal" class="modal" onclick="handleModalClick(event)">
     <div class="modal-content">
         <button class="close-btn" onclick="closeModal()">×</button>
         <img id="mImg" src="" alt="">
         <div class="modal-text">
-            <h2 id="mTitle" style="margin-bottom: 10px;"></h2>
-            <p id="mArtist" style="color: var(--neon); margin-bottom: 15px; font-size: 0.9rem;"></p>
-            <p id="mDesc" style="line-height: 1.8; color: #b9d8e8;"></p>
+            <h2 id="mTitle" class="modal-title"></h2>
+            <p id="mArtist" class="modal-artist"></p>
+            <p id="mDesc" class="modal-desc"></p>
         </div>
     </div>
 </div>
 
-<div class="footer">MIRROR · ARCHIVE v3.0</div>
+<div class="footer">MIRROR · ARCHIVE v3.1</div>
 
 <script>
-// البيانات
+// البيانات مع الوصف المفصل
 const arts = [
-  { title:"الموناليزا", artist:"ليوناردو دافنشي", year:1503, era:"عصر النهضة", wiki:"Mona_Lisa", desc:"ابتسامة غامضة تتحدى التفسير. كل من ينظر إليها يرى شيئًا مختلفًا." },
-  { title:"ميلاد فينوس", artist:"بوتيتشيلي", year:1485, era:"عصر النهضة", wiki:"The_Birth_of_Venus", desc:"إلهة تخرج من زبد البحر على صدفة. أنقى تصوير للجمال." },
-  { title:"العشاء الأخير", artist:"ليوناردو دافنشي", year:1498, era:"عصر النهضة", wiki:"The_Last_Supper_(Leonardo)", desc:"لحظة إعلان الخيانة، يتجمد الزمن حول مائدة واحدة." },
-  { title:"خلق آدم", artist:"مايكل أنجلو", year:1512, era:"عصر النهضة", wiki:"The_Creation_of_Adam", desc:"إصبعان يتقاربان ولا يتلامسان. المسافة بينهما هي سر الحياة." },
-  { title:"مدرسة أثينا", artist:"رافائيل", year:1511, era:"عصر النهضة", wiki:"The_School_of_Athens", desc:"كل فلاسفة اليونان في قاعة واحدة." },
-  { title:"حديقة الملذات الأرضية", artist:"هيرونيموس بوش", year:1510, era:"عصر النهضة", wiki:"The_Garden_of_Earthly_Delights", desc:"ثلاثية من الجنة إلى الجحيم، حالمة وغريبة." },
-  { title:"برج بابل", artist:"بيتر بروغل", year:1563, era:"عصر النهضة", wiki:"The_Tower_of_Babel_(Bruegel)", desc:"برج يخترق السحاب، غرور البشر مرسوم بدقة." },
-  { title:"الدورية الليلية", artist:"رامبرانت", year:1642, era:"الباروك", wiki:"The_Night_Watch", desc:"ضوء يقطع الظلام ليصنع مسرحًا حيًا." },
-  { title:"وصيفات الشرف", artist:"دييغو فيلاسكيز", year:1656, era:"الباروك", wiki:"Las_Meninas", desc:"اللوحة تنظر إلى نفسها. الواقع يترنح." },
-  { title:"الفتاة ذات القرط اللؤلؤي", artist:"يوهانس فيرمير", year:1665, era:"الباروك", wiki:"Girl_with_a_Pearl_Earring", desc:"نظرة تستدير نحوك في لحظة أبدية." },
-  { title:"الحرية تقود الشعب", artist:"أوجين ديلاكروا", year:1830, era:"الرومانسية", wiki:"Liberty_Leading_the_People", desc:"الحرية امرأة تتقدم الصفوف. أسطورة بصرية." },
-  { title:"طوف الميدوزا", artist:"تيودور جيريكو", year:1819, era:"الرومانسية", wiki:"The_Raft_of_the_Medusa", desc:"غرقى يتصارعون على طوف. صورة مروعة للبقاء." },
-  { title:"المتجول فوق بحر الضباب", artist:"كاسبار ديفيد فريدريش", year:1818, era:"الرومانسية", wiki:"Wanderer_above_the_Sea_of_Fog", desc:"رجل يحدق في بحر من الضباب." },
-  { title:"الثالث من مايو 1808", artist:"فرانسيسكو جويا", year:1814, era:"الرومانسية", wiki:"The_Third_of_May_1808", desc:"الظلام يبتلع ضوءًا واحدًا. جويا يرسم الجريمة." },
-  { title:"الموجة العظيمة", artist:"هوكوساي", year:1831, era:"أوكييو-إي", wiki:"The_Great_Wave_off_Kanagawa", desc:"الطبيعة تغضب، والبشر صغار أمامها." },
-  { title:"أوفيليا", artist:"جون إيفريت ميليه", year:1852, era:"ما قبل رافائيل", wiki:"Ophelia_(painting)", desc:"تغرق بين الزهور وهي تغني. استسلام شاعري." },
-  { title:"والدة ويستلر", artist:"جيمس ويستلر", year:1871, era:"الواقعية", wiki:"Whistler's_Mother", desc:"امرأة تجلس في صمت. هدوء لا ينتهي." },
-  { title:"انطباع، شروق الشمس", artist:"كلود مونيه", year:1872, era:"الانطباعية", wiki:"Impression,_Sunrise", desc:"اللوحة التي أعطت اسمًا لحركة فنية كاملة." },
-  { title:"صف الحصة", artist:"إدغار ديجا", year:1874, era:"الانطباعية", wiki:"The_Dance_Class_(Degas)", desc:"فتيات ينتظرن إشارة المعلم. لحظة ترقب." },
-  { title:"غداء على متن قارب", artist:"بيير أوغوست رينوار", year:1881, era:"الانطباعية", wiki:"Luncheon_of_the_Boating_Party", desc:"شرفة على النهر وضحكات تتردد." },
-  { title:"أحد على جزيرة لا غراند جات", artist:"جورج سورا", year:1884, era:"التنقيطية", wiki:"A_Sunday_on_La_Grande_Jatte", desc:"آلاف النقاط تتجمع لتشكّل عالمًا هادئًا." },
-  { title:"الليلة المرصعة بالنجوم", artist:"فان جوخ", year:1889, era:"ما بعد الانطباعية", wiki:"The_Starry_Night", desc:"سماء تدور كأنها نهر من الضوء. فان جوخ يحول الألم لجمال." },
-  { title:"مقهى ليلي", artist:"فان جوخ", year:1888, era:"ما بعد الانطباعية", wiki:"Café_Terrace_at_Night", desc:"مقهى يتوهج في ليلة زرقاء." },
-  { title:"الصرخة", artist:"إدفارد مونك", year:1893, era:"التعبيرية", wiki:"The_Scream", desc:"وجه يذوب في موجات من القلق." },
-  { title:"القُبلة", artist:"جوستاف كليمت", year:1908, era:"الفن الجديد", wiki:"The_Kiss_(Klimt)", desc:"جسدين يتحولان إلى ذهب وزخرفة." },
-  { title:"ثبات الذاكرة", artist:"سلفادور دالي", year:1931, era:"السريالية", wiki:"The_Persistence_of_Memory", desc:"ساعات تذوب كالجبن. الزمن إحساس." },
-  { title:"غيرنيكا", artist:"بابلو بيكاسو", year:1937, era:"التكعيبية", wiki:"Guernica_(Picasso)", desc:"مدينة مقطعة إلى آلاف الأشلاء. بيكاسو يرسم الحرب." },
-  { title:"الفريدتان", artist:"فريدا كاهلو", year:1939, era:"السريالية", wiki:"The_Two_Fridas", desc:"قلبان مكشوفان وأيدٍ متشابكة." },
-  { title:"صقور الليل", artist:"إدوارد هوبر", year:1942, era:"الواقعية الأمريكية", wiki:"Nighthawks", desc:"مقهى مضيء وسط مدينة فارغة. العزلة." },
-  { title:"قوطية أمريكية", artist:"جرانت وود", year:1930, era:"الواقعية الأمريكية", wiki:"American_Gothic", desc:"وجهان جامدان أمام منزل خشبي." },
-  { title:"ابن الإنسان", artist:"رينيه ماغريت", year:1964, era:"السريالية", wiki:"The_Son_of_Man", desc:"تفاحة تخفي وجهًا. ما الذي نخفيه؟" },
-  { title:"علب حساء كامبل", artist:"آندي وارهول", year:1962, era:"بوب آرت", wiki:"Campbell's_Soup_Cans", desc:"علب حساء على رف. الاستهلاك كأيقونة." }
+  { title:"الموناليزا", artist:"ليوناردو دافنشي", year:1503, era:"عصر النهضة", wiki:"Mona_Lisa", desc:"لوحة تتحدى الزمن. الابتسامة الغامضة والطبيعة الخلفية غير المكتملة يخلقان إحساسًا بأن اللوحة حية وتتغير أمام عينيك. دافنشي استخدم تقنية 'السفوماتو' (تخفيف الحدود) ليصنع ملامح لا تبدو صلبة، لتعبر عن الغموض البشري والتوتر بين الروح والطبيعة." },
+  { title:"ميلاد فينوس", artist:"بوتيتشيلي", year:1485, era:"عصر النهضة", wiki:"The_Birth_of_Venus", desc:"تخيل الجمال الإلهي وهو يخرج من البحر. اللوحة بتمثل النقاء والطبيعة، ورياح الربيع بتدفع فينوس ناحية الشاطئ. بوتيتشيلي هنا مش بيرسم واقع، هو بيرسم أسطورة شاعرية بتعبر عن الجمال المثالي والروحانية اللي عصر النهضة كان بيدور عليها." },
+  { title:"العشاء الأخير", artist:"ليوناردو دافنشي", year:1498, era:"عصر النهضة", wiki:"The_Last_Supper_(Leonardo)", desc:"اللوحة مش عن الأكل، هي لحظة الصدمة! المسيح لسه بيقول 'واحد فيكم هيسلمني'، وكل التلاميذ في حالة ذهول وصدمة. دافنشي رتب الـ 12 شخص في 3 مجموعات عشان يحكي قصة الخيانة والوفاء في ثانية واحدة." },
+  { title:"خلق آدم", artist:"مايكل أنجلو", year:1512, era:"عصر النهضة", wiki:"The_Creation_of_Adam", desc:"نقطة التلامس بين إصبع الله وإصبع آدم هي سر الحياة. آدم بيبان خامل ومسترخي، ربنا بيبعت له الطاقة. اللوحة بتعبر عن لحظة بداية الحياة، والفجوة الصغيرة بين الإصبعين خلقت توتر خالد بيجذب العين." },
+  { title:"مدرسة أثينا", artist:"رافائيل", year:1511, era:"عصر النهضة", wiki:"The_School_of_Athens", desc:"حلم عصر النهضة في لوحة واحدة. كل فلاسفة وعلماء اليونان اتجمعوا في قاعة واحدة (أفلاطون وأرسطو في النص). رافائيل هنا بيحتفل بالعقل البشري والبحث عن الحقيقة، وكأنه بيقول إن العلم والفكر بيتكملوا مع بعض." },
+  { title:"حديقة الملذات الأرضية", artist:"هيرونيموس بوش", year:1510, era:"عصر النهضة", wiki:"The_Garden_of_Earthly_Delights", desc:"رحلة سريالية بين الجنة (يسار)، الملذات (وسط)، والجحيم (يمين). اللوحة مليانة تفاصيل غريبة وكائنات خرافية. بوش كان بيحذر البشر من الانغماس في الشهوات، واللوحة بتبان كأنها كابوس مرئي عن مصير الإنسان." },
+  { title:"برج بابل", artist:"بيتر بروغل", year:1563, era:"عصر النهضة", wiki:"The_Tower_of_Babel_(Bruegel)", desc:"البرج بيرمز للغرور البشري. البشر بيحاولوا يبنوا حاجة توصل للسما بجهدهم، لكن البناء مهزوز ومش مكتمل. اللوحة بتعبر عن فشل الطموح البشري لما بيبقى بعيد عن الحكمة، وبتشبه المدن الحديثة المزدحمة اللي بتدور على المستحيل." },
+  { title:"الدورية الليلية", artist:"رامبرانت", year:1642, era:"الباروك", wiki:"The_Night_Watch", desc:"رامبرانت كسر قاعدة رسم الشخصيات، ورسم 'الحركة'. الضوء واقع على القبطان ومساعده، والباقي في ظل. اللوحة بتحسسك إن فيه حدث لسه بيحصل، مش مجرد صورة. بتعبر عن الانتماء والحركة في ظل ظلام دامس." },
+  { title:"وصيفات الشرف", artist:"دييغو فيلاسكيز", year:1656, era:"الباروك", wiki:"Las_Meninas", desc:"اللوحة دي عبارة عن ألغاز! الرسام راسم نفسه وهو بيرسم، والطفلة (الملكة الصغيرة) بتتفرج. الملك والملكة بيبانوا في المرايا في الخلف. اللوحة بتسأل: مين اللي بيتم رسمه؟ مين اللي بيراقب؟ بتعبر عن تعقيد الواقع وفكرة 'الصورة داخل الصورة'." },
+  { title:"الفتاة ذات القرط اللؤلؤي", artist:"يوهانس فيرمير", year:1665, era:"الباروك", wiki:"Girl_with_a_Pearl_Earring", desc:"بيسموها 'موناليزا الشمال'. فيرمير ركز على الضوء اللي واقع على وشها والقرط. اللحظة اللي هي بتلف فيها لورا وتفرج علينا بحياء وسرية. بتعبر عن البساطة، الجمال الهادي، والغموض اللي في نظرة العين." },
+  { title:"الحرية تقود الشعب", artist:"أوجين ديلاكروا", year:1830, era:"الرومانسية", wiki:"Liberty_Leading_the_People", desc:"الست اللي في النص هي رمز الحرية، بتقود الشعب فوق الجثث والدمار. اللوحة بتحكي عن ثورة 1830 في فرنسا. بتعبر عن التضحية، الشجاعة، والأمل في بكرة أحسن مهما كان الحاضر صعب." },
+  { title:"طوف الميدوزا", artist:"تيودور جيريكو", year:1819, era:"الرومانسية", wiki:"The_Raft_of_the_Medusa", desc:"قصة حقيقية لسفينة غرقت والتخلي عن الركاب. اللوحة بترسم لحظة الصراع بين الأمل (بيحاولوا يلوحوا لسفينة إنقاذ) واليأس والموت. بتعبر عن هشاشة الإنسان وقسوة الطبيعة، وبتعكس فساد المسؤولين اللي سابوا الشعب يموت." },
+  { title:"المتجول فوق بحر الضباب", artist:"كاسبار ديفيد فريدريش", year:1818, era:"الرومانسية", wiki:"Wanderer_above_the_Sea_of_Fog", desc:"راجل واقف لوحده بيتأمل في بحر من الضباب. اللوحة مش عن الشخص، دي عن 'الإحساس'. بتعبر عن عظمة الطبيعة أمام ضعف الإنسان، والتأمل، والوحدة. من أشهر لوحات الرومانسية اللي بتحسسك بالفناء وأنت بتتفرج." },
+  { title:"الثالث من مايو 1808", artist:"فرانسيسكو جويا", year:1814, era:"الرومانسية", wiki:"The_Third_of_May_1808", desc:"جويا هنا بيرسم جرح في التاريخ. الجيش الفرنسي بيعمل إعدامات لمدنيين إسبان. الراجل اللي لابس أبيض ورافع إيديه، والدم اللي على الأرض. بتعبر عن فظاعة الحرب ووجهها القبيح، ومفيش مجد هنا، فيه موت بس." },
+  { title:"الموجة العظيمة", artist:"هوكوساي", year:1831, era:"أوكييو-إي", wiki:"The_Great_Wave_off_Kanagawa", desc:"الموجة عالية كأنها وحش هيهجم على القوارب. جبل فوجي واقف في الخلف بثبات. اللوحة بتعبر عن التوازن بين قوة الطبيعة المدمرة وهدوء الجبل. بتعكس فلسفة يابانية عن الاحترام للطبيعة والخوف منها في نفس الوقت." },
+  { title:"أوفيليا", artist:"جون إيفريت ميليه", year:1852, era:"ما قبل رافائيل", wiki:"Ophelia_(painting)", desc:"مشهد غرق أوفيليا من مسرحيات شكسبير. هي بتموت وسط الزهور والزينة، وبتغني. اللوحة بتحول الموت لمشهد جمال شاعري. بتعبر عن الجنون، الحب المرفوض، والنهاية الهادية الحزينة، مع تفاصيل رهيبة لكل زهرة." },
+  { title:"والدة ويستلر", artist:"جيمس ويستلر", year:1871, era:"الواقعية", wiki:"Whistler's_Mother", desc:"لوحة بسيطة جدًا لست كبيرة بتقعد على كرسي في غرفة هادية. ويستلر قال عنها 'ترتيب في الرمادي والأسود'. مش عن الشخص، دي عن الهارموني والشكل. بتعبر عن الهدوء، الرزانة، والشعور بالأمان اللي بيديه الحضن." },
+  { title:"انطباع، شروق الشمس", artist:"كلود مونيه", year:1872, era:"الانطباعية", wiki:"Impression,_Sunrise", desc:"شمس برتقالية بتشرق على ميناء ضبابي. مفيش تفاصيل دقيقة، مفيش خطوط واضحة، كله ضربات فرشاة سريعة. اللوحة دي هي اللي بدأت حركة 'الانطباعية'، وبتعبر عن اللحظة العابرة والإحساس السريع بالضوء والجو." },
+  { title:"صف الحصة", artist:"إدغار ديجا", year:1874, era:"الانطباعية", wiki:"The_Dance_Class_(Degas)", desc:"ديجا كان بيحب يرسم الحركة. فتيات الباليه مش بيستعرضوا، بالعكس ده هما مرهقين ومستنيين إشارة المعلم. اللوحة بتعبر عن الكواليس، التعب، الانضباط، والجهد اللي ورا الجمال، مع زوايا غريبة ومبتكرة." },
+  { title:"غداء على متن قارب", artist:"بيير أوغوست رينوار", year:1881, era:"الانطباعية", wiki:"Luncheon_of_the_Boating_Party", desc:"أصدقاء بيتغدوا على شرفة مطلة على النهر. الشمس بتدخل من بين الشجر وتعمل دوائر ضوء على هدومهم. رينوار بيرسم السعادة، البهجة، والاسترخاء في يوم صيفي. بتعبر عن فرحة الحياة البسيطة." },
+  { title:"أحد على جزيرة لا غراند جات", artist:"جورج سورا", year:1884, era:"التنقيطية", wiki:"A_Sunday_on_La_Grande_Jatte", desc:"آلاف النقاط الصغيرة اتجمعت عشان ترسم باريسيين بيرتاحوا في حديقة. اللوحة بتعبر عن الهدوء والصرامة في نفس الوقت. بتشبه مشهد سينمائي مجمد. فيها طبقات اجتماعية مختلفة بتقف مع بعض في هدوء غريب." },
+  { title:"الليلة المرصعة بالنجوم", artist:"فان جوخ", year:1889, era:"ما بعد الانطباعية", wiki:"The_Starry_Night", desc:"فان جوخ رسمها من مصحة الأمراض النفسية. السما بتلف وتدور كأنها موج بحر. الشجرة السوداء (السرو) بتوصل الأرض بالسما. بتعبر عن العاصفة الداخلية والاضطراب النفسي، مع رغبة في السلام الروحي، رغم إن القرية تحت هادية جدًا." },
+  { title:"مقهى ليلي", artist:"فان جوخ", year:1888, era:"ما بعد الانطباعية", wiki:"Café_Terrace_at_Night", desc:"مقهى بلون أصفر قوي وسط ليل أزرق عميق. النجوم بتلمع في السما. فان جوخ كان عايز يبين إن الليل أكثر حيوية وألوان من النهار. اللوحة بتعبر عن الأمل، الدفء، الرغبة في التواصل، وسط العتمة." },
+  { title:"الصرخة", artist:"إدفارد مونك", year:1893, era:"التعبيرية", wiki:"The_Scream", desc:"في الحقيقة، الشخص ده مش هو اللي بيصرخ، هو بيغطي ودانه من 'صرخة الطبيعة'. السما حمراء (زي ثورة بركان)، والإنسان بيتلوي من الرعب. بتعبر عن القلق الوجودي، الذعر، والاكتئاب اللي بيحس بيه الإنسان في عالم مليان فوضى." },
+  { title:"القُبلة", artist:"جوستاف كليمت", year:1908, era:"الفن الجديد", wiki:"The_Kiss_(Klimt)", desc:"راجل وست بيدوبوا في بعض وسط أشكال ذهبية مزركشة. الست بتستسلم للحظة، والراجل محاوطها. اللوحة بتعبر عن الحب كحالة من الاندماج الكامل، الأمان، والانفصال عن العالم. الذهب هنا بيرمز للروحانية والقدسية." },
+  { title:"ثبات الذاكرة", artist:"سلفادور دالي", year:1931, era:"السريالية", wiki:"The_Persistence_of_Memory", desc:"ساعات بتدوب وتسيح على الشجر والطاولة. دالي هنا بيهاجم فكرة 'الزمن الثابت'. بتعبر عن إن الوقت مش حاجة صلبة، هو إحساس. في الأحلام، والذكريات، الزمن بيمتد وبيتغير. اللوحة بتسأل: إيه هو الوقت الحقيقي؟" },
+  { title:"غيرنيكا", artist:"بابلو بيكاسو", year:1937, era:"التكعيبية", wiki:"Guernica_(Picasso)", desc:"رد فعل على قصف مدينة غيرنيكا في إسبانيا. الوجوه مقطعة، الأجساد مشوهة، الثور بيصرخ، الأم شايلة ولدها الميت. مفيش ألوان، أبيض وأسود بس (زي الجرايد). بتعبر عن فظاعة الحرب، العذاب، وكيف إن المدنيين هما اللي بيدفعوا التمن." },
+  { title:"الفريدتان", artist:"فريدا كاهلو", year:1939, era:"السريالية", wiki:"The_Two_Fridas", desc:"فريدا بترسم نفسها مرتين: واحدة بلبس أوروبي وواحدة بلبس مكسيكي. القلبين مكشوفين ومربوطين بشرايين. اللوحة بتعبر عن الانقسام الداخلي، الهوية، والألم الجسدي والنفسي اللي كانت بتعاني منه بعد حادثة وحياتها مع دييجو ريفيرا." },
+  { title:"صقور الليل", artist:"إدوارد هوبر", year:1942, era:"الواقعية الأمريكية", wiki:"Nighthawks", desc:"4 أشخاص في كافيتريا مضيئة وسط مدينة فاضية في الليل. كلهن قاعدين قريبين من بعض، بس مفيش كلام ولا تواصل. اللوحة بتعبر عن العزلة، الوحدة، والاغتراب في المدينة الحديثة (خصوصاً في زمن الحرب العالمية التانية)." },
+  { title:"قوطية أمريكية", artist:"جرانت وود", year:1930, era:"الواقعية الأمريكية", wiki:"American_Gothic", desc:"راجل ماسك شوكة (رمز العمل)، وست جنبه، واقفين قدام بيت خشبي بشباك على شكل قوس. وشوشهم جدية وجامدة. اللوحة بقت أيقونة للريف الأمريكي، لكنها بتحمل سخرية خفية من الحياة الزراعية القاسية والمحافظة." },
+  { title:"ابن الإنسان", artist:"رينيه ماغريت", year:1964, era:"السريالية", wiki:"The_Son_of_Man", desc:"راجل بلبس رسمي، لكن وشه مغطي بتفاحة! ماغريت بيلعب على فكرة 'إخفاء المألوف'. بتعبر عن إننا دايماً بنشوف بس جزء من الحقيقة، وإن دايماً في حاجة مخفية ورا اللي إحنا شايفينه. إحساس بالغموض والخداع البصري." },
+  { title:"علب حساء كامبل", artist:"آندي وارهول", year:1962, era:"بوب آرت", wiki:"Campbell's_Soup_Cans", desc:"32 علبة حساء متراصة. وارهول هنا مش بيرسم فن تقليدي، هو بيرسم 'الاستهلاك'. اللوحة بتعبر عن ثقافة الاستهلاك الجماعي في أمريكا، والتكرار اللي بيشبه حياتنا اليومية. بيسأل: إيه اللي بيخلي الحاجة العادية تبقى فنية؟" }
 ];
 
 let currentEra = 'all';
@@ -126,6 +161,7 @@ let currentArtist = 'all';
 const gallery = document.getElementById('gallery');
 const eraFilters = document.getElementById('eraFilters');
 const artistFilters = document.getElementById('artistFilters');
+const scrollTopBtn = document.getElementById('scrollTop');
 
 // رسم المعرض
 function renderGallery() {
@@ -167,7 +203,7 @@ function renderGallery() {
     });
     
     if (count === 0) {
-        gallery.innerHTML = '<p style="text-align:center; width:100%; color:#6fa9c2; grid-column: 1/-1;">لا توجد لوحات مطابقة</p>';
+        gallery.innerHTML = '<p style="text-align:center; width:100%; color:#6fa9c2; grid-column: 1/-1; font-size: 1.1rem;">لا توجد لوحات مطابقة للبحث</p>';
     }
 }
 
@@ -191,29 +227,4 @@ window.setArtist = (artist) => { currentArtist = artist; renderFilters(); render
 // المودال
 window.openModal = (art, index) => {
     document.getElementById('mImg').src = `https://picsum.photos/seed/art${index}/800/600`;
-    document.getElementById('mTitle').textContent = art.title;
-    document.getElementById('mArtist').textContent = `${art.artist} · ${art.year} · ${art.era}`;
-    document.getElementById('mDesc').textContent = art.desc;
-    
-    fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${art.wiki}`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.originalimage && data.originalimage.source) {
-                document.getElementById('mImg').src = data.originalimage.source;
-            }
-        })
-        .catch(() => {});
-        
-    document.getElementById('modal').classList.add('open');
-};
-
-window.closeModal = () => {
-    document.getElementById('modal').classList.remove('open');
-};
-
-// بدء التشغيل
-renderFilters();
-renderGallery();
-</script>
-</body>
-</html>
+    document.getElementById('mTitle').textContent =
