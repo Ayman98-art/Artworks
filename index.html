@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="referrer" content="no-referrer">
+  <title>مِرآة // MIRROR - أرشيف الفنون البصرية السيبراني</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Orbitron:wght@600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="cyber-grid-overlay"></div>
+  <div class="cyber-vignette"></div>
+  <div class="scanlines"></div>
+
+  <main class="app-container">
+
+    <!-- HUD Header -->
+    <header class="hud-header">
+      <div class="header-top-bar">
+        <div class="hud-telemetry">
+          <div class="telemetry-item">
+            <span class="status-dot"></span>
+            <span>SYS_ONLINE</span>
+          </div>
+          <div class="telemetry-item">
+            <span>CORE: HUD_V7.3</span>
+          </div>
+          <div class="telemetry-item">
+            <span>60_ITEMS_DECRYPTED</span>
+          </div>
+        </div>
+
+        <div class="header-controls">
+          <button id="soundToggle" class="hud-btn-toggle active" type="button" title="مؤثرات الواجهة">
+            مؤثرات: مفعّلة
+          </button>
+          <button id="ambientToggleBtn" class="hud-btn-toggle" type="button" title="نغمة السايبر الخلفية">
+            نغمة السايبر
+          </button>
+        </div>
+      </div>
+
+      <div class="brand-wrapper">
+        <div class="brand-main">
+          <div class="brand-logo-hex">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <div class="brand-title-group">
+            <h1>
+              مِرآة
+              <span class="brand-en-sub">// MIRROR ARCHIVE</span>
+            </h1>
+            <p class="brand-desc">
+              أرشيف سيبراني يوثق 60 شاهقة فنية تاريخية من عصر النهضة حتى السريالية، مع تواقيع صوتية وترددات هارمونية ومحاكاة هولوغرافية.
+            </p>
+          </div>
+        </div>
+
+        <div class="stats-card-hud">
+          <span class="count-value" id="countDisplay">60 / 60</span>
+          <span class="count-label">لوحة مشفرة بالمعرض</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Control Station & Filters -->
+    <section class="hud-station" aria-label="محطة التحكم والفلترة">
+      <div class="station-row-top">
+        <div class="search-hud-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="searchInput" class="search-hud-input" placeholder="ابحث باسم اللوحة، الفنان، أو العصر الفني..." autocomplete="off">
+          <button id="searchClear" class="search-clear-btn" type="button" title="مسح">✕</button>
+        </div>
+
+        <div class="selects-group-mobile">
+          <div class="select-hud-wrapper">
+            <select id="artistSelect" class="select-hud" aria-label="تصفية حسب الفنان">
+              <option value="all">كافة الفنانين (الكل)</option>
+            </select>
+          </div>
+
+          <div class="select-hud-wrapper">
+            <select id="sortSelect" class="select-hud" aria-label="ترتيب النتائج">
+              <option value="default">الترتيب الافتراضي</option>
+              <option value="year-asc">الأقدم تاريخاً</option>
+              <option value="year-desc">الأحدث تاريخاً</option>
+              <option value="title-asc">اسم اللوحة (أ-ي)</option>
+              <option value="artist-asc">اسم الفنان (أ-ي)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Era Filters (Swipeable on Mobile) -->
+      <div class="era-filters-row" role="tablist">
+        <button class="era-filter-btn active" data-category="all" type="button">الكل <span class="badge">[60]</span></button>
+        <button class="era-filter-btn" data-category="renaissance" type="button">عصر النهضة</button>
+        <button class="era-filter-btn" data-category="baroque" type="button">الباروك</button>
+        <button class="era-filter-btn" data-category="romanticism" type="button">الكلاسيكية والرومانسية</button>
+        <button class="era-filter-btn" data-category="impressionism" type="button">الانطباعية</button>
+        <button class="era-filter-btn" data-category="post-impressionism" type="button">ما بعد الانطباعية</button>
+        <button class="era-filter-btn" data-category="surrealism" type="button">السريالية</button>
+        <button class="era-filter-btn" data-category="modern" type="button">التكعيبية والتجريد</button>
+        <button class="era-filter-btn" data-category="controversial" type="button">أعمال مثيرة للجدل ومظلمة</button>
+      </div>
+    </section>
+
+    <!-- Gallery Grid -->
+    <section class="gallery-grid" id="galleryGrid" aria-label="معرض اللوحات الفنية">
+    </section>
+
+  </main>
+
+  <!-- Holographic Inspection Chamber Modal -->
+  <div id="hudModal" class="hud-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitleText">
+    <div class="hud-modal-window">
+      
+      <header class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-badge" id="modalIdBadge">MRR-001</span>
+          <h2 class="modal-title-text" id="modalTitleText">عنوان اللوحة</h2>
+        </div>
+        <button id="modalCloseBtn" class="modal-close-btn" type="button" title="إغلاق" aria-label="إغلاق">✕</button>
+      </header>
+
+      <div class="modal-body">
+        
+        <!-- Visual & Audio Inspection Side -->
+        <div class="modal-visual-side">
+          <div class="modal-img-container" id="modalImgContainer">
+            <img id="modalImg" src="" alt="" loading="lazy" referrerpolicy="no-referrer">
+            <button id="zoomToggleBtn" class="zoom-hint-btn" type="button">تكبير التفاصيل</button>
+          </div>
+
+          <div class="voice-signature-deck">
+            <div class="deck-header">
+              <span class="deck-title">
+                <span>🔊</span>
+                <span>VOICE SIGNATURE // SPECTRUM</span>
+              </span>
+              <span id="modalFreq" style="font-family: var(--font-hud); font-size: 0.72rem; color: var(--cyan-neon);">432 Hz</span>
+            </div>
+
+            <canvas id="audioVisualizer" class="visualizer-canvas" width="360" height="42"></canvas>
+
+            <div class="deck-controls">
+              <button id="playVoiceSignatureBtn" class="deck-btn" type="button">
+                <span>▶</span>
+                <span>تشغيل التوقيع الصوتي</span>
+              </button>
+              <button id="speechNarratorBtn" class="deck-btn narrator" type="button">
+                <span>🎙️</span>
+                <span>قراءة التحليل الصوتي</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metadata & Deep Analysis Side -->
+        <div class="modal-info-side">
+          <div class="modal-meta-grid">
+            <div>
+              <span class="meta-field-label">العنوان الأصلي</span>
+              <span class="meta-field-value" id="modalOriginalTitle">-</span>
+            </div>
+            <div>
+              <span class="meta-field-label">الفنان</span>
+              <span class="meta-field-value" id="modalArtist">-</span>
+            </div>
+            <div>
+              <span class="meta-field-label">تاريخ الإنجاز</span>
+              <span class="meta-field-value" id="modalYear">-</span>
+            </div>
+            <div>
+              <span class="meta-field-label">المدرسة / العصر</span>
+              <span class="meta-field-value" id="modalEra">-</span>
+            </div>
+            <div style="grid-column: 1 / -1;">
+              <span class="meta-field-label">مكان العرض الحالي</span>
+              <span class="meta-field-value" id="modalLocation">-</span>
+            </div>
+          </div>
+
+          <h3 class="section-block-title">
+            <span>📜</span>
+            <span>السياق التاريخي والوصفي</span>
+          </h3>
+          <p class="modal-desc-text" id="modalDesc">-</p>
+
+          <h3 class="section-block-title">
+            <span>🔬</span>
+            <span>التحليل الفلسفي والرموز الفنية</span>
+          </h3>
+          <div class="analysis-box">
+            <p id="modalAnalysis">-</p>
+          </div>
+        </div>
+
+      </div>
+
+      <footer class="modal-nav-footer">
+        <button id="modalPrevBtn" class="modal-nav-btn" type="button">
+          <span>&rarr;</span>
+          <span>اللوحة السابقة</span>
+        </button>
+        <button id="modalNextBtn" class="modal-nav-btn" type="button">
+          <span>اللوحة التالية</span>
+          <span>&larr;</span>
+        </button>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button id="backToTopBtn" class="back-to-top-btn" type="button" title="العودة لأعلى" aria-label="العودة لأعلى">
+    ▲
+  </button>
+
+  <script src="artworks_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
